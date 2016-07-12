@@ -89,7 +89,7 @@ public class TicketServlet extends HttpServlet {
 	}
 	
 	
-	//see if you can break out functions below to a supporting class. After I get basic functions working.  see Ticket Functions.java.
+	//see if you can break out the functions below to a supporting class. After I get basic functions working.  see Ticket Functions.java.
 	// these items are not called directly by switch statment at top and seem a good candidate for refactoring.
 	public Ticket getTicket(String idString, HttpServletResponse response)
             throws ServletException, IOException
