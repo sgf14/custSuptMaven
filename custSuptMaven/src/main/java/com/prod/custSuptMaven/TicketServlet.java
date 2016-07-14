@@ -30,6 +30,7 @@ public class TicketServlet extends HttpServlet {
 	//temporary hashMap database for use until persistence is setup later in book
 	public Map<Integer, Ticket> ticketDatabase = new LinkedHashMap<>();
 	
+	//servlet get/post methods
 	@Override
 	protected void doGet (HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
@@ -69,7 +70,8 @@ public class TicketServlet extends HttpServlet {
 			break;
 		}		
 	}
-		
+	
+	//servlet action methods
 	private void showTicketForm(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/jsp/view/ticketForm.jsp").forward(request, response);
@@ -88,9 +90,16 @@ public class TicketServlet extends HttpServlet {
 		request.getRequestDispatcher("/WEB-INF/jsp/view/viewTicket.jsp").forward(request, response);
 	}
 	
+	private void listTickets(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setAttribute("ticketDatabase", this.ticketDatabase);
+		
+		request.getRequestDispatcher("WEB_INF/jsp/view/listTickets.jsp").forward(request, response);
+	}
 	
-	//see if you can break out the functions below to a supporting class. After I get basic functions working.  see Ticket Functions.java.
-	// these items are not called directly by switch statment at top and seem a good candidate for refactoring.
+	//items below jsp calls.  See if you can break out the functions below to a supporting class. After I get basic functions working.  
+	//see Ticket Functions.java.
+	// these items are not called directly by switch statement at top and seem a good candidate for refactoring.
 	//have a few more to add.
 	public Ticket getTicket(String idString, HttpServletResponse response)
             throws ServletException, IOException
