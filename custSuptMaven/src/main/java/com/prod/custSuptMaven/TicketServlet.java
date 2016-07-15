@@ -1,15 +1,19 @@
 package com.prod.custSuptMaven;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import com.prod.custSuptMaven.Ticket;
+import com.prod.custSuptMaven.Attachment;
 //import com.prod.custSuptMaven.TicketFunctions;
 
 @WebServlet (
@@ -49,7 +53,7 @@ public class TicketServlet extends HttpServlet {
 			break;
 		case "list":
 		default:
-			this.listTickets(response);
+			this.listTickets(request, response);
 			break;
 		}
 	}
@@ -90,18 +94,88 @@ public class TicketServlet extends HttpServlet {
 		request.getRequestDispatcher("/WEB-INF/jsp/view/viewTicket.jsp").forward(request, response);
 	}
 	
+	private void downloadAttachment(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
+		String idString = request.getParameter("ticketId");
+		Ticket ticket = this.getTicket(idString, response);
+		if(ticket == null)
+		return;
+		
+		String name = request.getParameter("attachment");
+		if(name == null) {
+			response.sendRedirect("tickets?action=view&ticketId=" + idString);
+			return;
+		}
+		
+		Attachment attachment = ticket.getAttachment(name);
+		if(attachment == null) {
+			response.sendRedirect("tickets?action=view&ticketId=" + idString);
+			return;
+		}
+		
+		response.setHeader("Content-Disposition",
+		"attachment; filename=" + attachment.getName());
+		response.setContentType("application/octet-stream");
+		
+		ServletOutputStream stream = response.getOutputStream();
+		stream.write(attachment.getContents());
+	}
+	
 	private void listTickets(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setAttribute("ticketDatabase", this.ticketDatabase);
 		
-		request.getRequestDispatcher("WEB_INF/jsp/view/listTickets.jsp").forward(request, response);
+		request.getRequestDispatcher("WEB-INF/jsp/view/listTickets.jsp").forward(request, response);
+	}
+	
+	private void createTicket(HttpServletRequest request, HttpServletResponse response)
+	throws ServletException, IOException {
+		Ticket ticket = new Ticket();
+		ticket.setCustomerName(request.getParameter("customerName"));
+		ticket.setSubject(request.getParameter("subject"));
+		ticket.setBody(request.getParameter("body"));
+		
+		Part filePart = request.getPart("file1");
+		if(filePart != null && filePart.getSize() > 0) {
+			Attachment attachment = this.processAttachment(filePart);
+			
+			if(attachment != null)
+				ticket.addAttachment(attachment);
+		}
+		
+		int id;
+		synchronized(this) {
+			id = this.TICKET_ID_SEQUENCE++;
+			this.ticketDatabase.put(id, ticket);
+		}
+		
+		response.sendRedirect("tickets?action=view&ticketId=" + id);
 	}
 	
 	//items below jsp calls.  See if you can break out the functions below to a supporting class. After I get basic functions working.  
 	//see Ticket Functions.java.
 	// these items are not called directly by switch statement at top and seem a good candidate for refactoring.
 	//have a few more to add.
-	public Ticket getTicket(String idString, HttpServletResponse response)
+	private Attachment processAttachment(Part filePart)
+            throws IOException {
+        	InputStream inputStream = filePart.getInputStream();
+        	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        	int read;
+        	final byte[] bytes = new byte[1024];
+
+        	while((read = inputStream.read(bytes)) != -1) {
+        		outputStream.write(bytes, 0, read);
+        	}
+
+        Attachment attachment = new Attachment();
+        attachment.setName(filePart.getSubmittedFileName());
+        attachment.setContents(outputStream.toByteArray());
+
+        return attachment;
+    }
+	
+	private Ticket getTicket(String idString, HttpServletResponse response)
             throws ServletException, IOException
     {
         if(idString == null || idString.length() == 0)

@@ -33,6 +33,6 @@
 				}
 			}
 		%>
-<!-- left off here 07/13/16- need to fix the closing error above, then compare supt-V2 for missing stuff- Ticket Servlet mainly -->
+
 </body>
 </html>

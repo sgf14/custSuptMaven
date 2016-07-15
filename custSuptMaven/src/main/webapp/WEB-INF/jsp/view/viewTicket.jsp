@@ -26,7 +26,7 @@ duplicated in each jsp file-->
 					<c:param name="ticketId" value="<%= ticketId %>" />
 					<c:param name="attachment" value="<%= a.getName() %>" />
 					</c:url>"><%= a.getName() %>
-				</a><%
+				</a><br><br><%
 			}
 		}
 	%>
