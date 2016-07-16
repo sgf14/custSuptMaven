@@ -1,5 +1,5 @@
 package com.prod.custSuptMaven;
-
+//Ticket servlet starts chap 3, pg 65, but modified in chap 4, pg 97
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,11 +34,16 @@ public class TicketServlet extends HttpServlet {
 	//temporary hashMap database for use until persistence is setup later in book
 	public Map<Integer, Ticket> ticketDatabase = new LinkedHashMap<>();
 	
-	//servlet get/post methods
+		//servlet get/post methods
 	@Override
 	protected void doGet (HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		String action = request.getParameter("action");
+		//ensures user is logged in. otherwise they could still access the pages with the right url string. chap 5 addition
+		if(request.getSession().getAttribute("username") == null) {
+			response.sendRedirect("login");
+		}
+		
 		if (action == null) action = "list";
 		
 		switch(action) {
@@ -62,17 +67,23 @@ public class TicketServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getParameter("action");
-	if (action == null) action = "list";
 		
-		switch(action) {
-		case "create":
-			this.createTicket(request, response);
-			break;	
-		case "download":
-		default:
-			response.sendRedirect("tickets");;
-			break;
-		}		
+		//ensures user is logged in. otherwise they could still access the pages with the right url string. chap 5 addition
+		if(request.getSession().getAttribute("username") == null) {
+			response.sendRedirect("login");
+		}
+		
+		if (action == null) action = "list";
+			
+			switch(action) {
+			case "create":
+				this.createTicket(request, response);
+				break;	
+			case "download":
+			default:
+				response.sendRedirect("tickets");;
+				break;
+			}		
 	}
 	
 	//servlet action methods
@@ -131,7 +142,7 @@ public class TicketServlet extends HttpServlet {
 	private void createTicket(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		Ticket ticket = new Ticket();
-		ticket.setCustomerName(request.getParameter("customerName"));
+		ticket.setCustomerName((String)request.getSession().getAttribute("username"));
 		ticket.setSubject(request.getParameter("subject"));
 		ticket.setBody(request.getParameter("body"));
 		

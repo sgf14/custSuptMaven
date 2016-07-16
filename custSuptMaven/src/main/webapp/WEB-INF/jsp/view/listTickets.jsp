@@ -1,4 +1,3 @@
-<%@ page session="false" %>
 <%@ page language="java" import="java.util.Map" %>
 
 <%

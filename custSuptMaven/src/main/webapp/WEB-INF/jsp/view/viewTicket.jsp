@@ -1,4 +1,3 @@
-<%@ page session="false" %>
 <!-- note that for Ticket and Attachment classes below, base.jspf will take care of the import so it doesnt have to be 
 duplicated in each jsp file-->
 <%
