@@ -1,5 +1,5 @@
 package com.prod.custSuptMaven;
-
+//attachment starts chap 3, pg 67
 public class Attachment {
 	//instantiate vars
     private String name;

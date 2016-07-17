@@ -1,4 +1,3 @@
-<%@ page session="false" %>
 <!-- note that for Ticket and Attachment classes below, base.jspf will take care of the import so it doesnt have to be 
 duplicated in each jsp file-->
 <%
@@ -11,6 +10,7 @@ duplicated in each jsp file-->
 	<title>Customer Support</title>
 </head>
 <body>
+	<a href="<c:url value="/login?logout" />">Logout</a>
 	<h2>Ticket #<%= ticketId %>: <%= ticket.getSubject() %></h2>
 	<i> Customer Name - <%= ticket.getCustomerName() %></i><br><br>
 	<%

@@ -1,4 +1,7 @@
 package com.prod.custSuptMaven;
+//TicketFunctions was self created-not in JWA book, but based on modular OOP principles.  Intended to pulling some support code out 
+//of TicketServlet.java.  unfinished at this time-07/16/16- per notes below and chap 3 pg 68 as a starting point.
+
 
 //import java.io.IOException;
 //
