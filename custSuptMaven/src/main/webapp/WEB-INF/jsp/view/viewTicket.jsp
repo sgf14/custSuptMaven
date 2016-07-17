@@ -10,6 +10,7 @@ duplicated in each jsp file-->
 	<title>Customer Support</title>
 </head>
 <body>
+	<a href="<c:url value="/login?logout" />">Logout</a>
 	<h2>Ticket #<%= ticketId %>: <%= ticket.getSubject() %></h2>
 	<i> Customer Name - <%= ticket.getCustomerName() %></i><br><br>
 	<%

@@ -28,7 +28,13 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet (HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		if(session.getAttribute("username") != null) {
+		//logout function, see JWA pg 132
+		if (request.getParameter("logout") != null) {
+			session.invalidate();
+			response.sendRedirect("login");
+			return;
+		//else login and send to /tickets- note the initial backslash not added, similar to "WEB-INF/..." below
+		} else if (session.getAttribute("username") != null) {
 			response.sendRedirect("tickets");
 			return;
 		}
@@ -41,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost (HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		if(session.getAttribute("username") != null) {
+		if (session.getAttribute("username") != null) {
 			response.sendRedirect("tickets");
 			return;
 		}

@@ -8,7 +8,7 @@
 	<h2>Login</h2>
 	You must login to access the customer support site.<br><br>
 	<%
-		if (((Boolean).request.getAttribute("loginFailed"))) {
+		if (((Boolean)request.getAttribute("loginFailed"))) {
 			%>
 			<b>The username or password you entered are not correct.  Please
 			try again.</b><br><br>

@@ -39,9 +39,11 @@ public class TicketServlet extends HttpServlet {
 	protected void doGet (HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		String action = request.getParameter("action");
+		
 		//ensures user is logged in. otherwise they could still access the pages with the right url string. chap 5 addition
 		if(request.getSession().getAttribute("username") == null) {
 			response.sendRedirect("login");
+			return;
 		}
 		
 		if (action == null) action = "list";
@@ -71,7 +73,10 @@ public class TicketServlet extends HttpServlet {
 		//ensures user is logged in. otherwise they could still access the pages with the right url string. chap 5 addition
 		if(request.getSession().getAttribute("username") == null) {
 			response.sendRedirect("login");
-		}
+			//ensures method exits out and base dir entry 'localhost/custSuptMaven/' goes to /login and not /tickets (which 
+			//produces http/java error.  note return still works with void in method because it is not returning a variable.
+			return;
+		}		
 		
 		if (action == null) action = "list";
 			
