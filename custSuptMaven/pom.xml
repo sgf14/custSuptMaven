@@ -15,6 +15,7 @@
     </properties>
     
     <dependencies>
+<!--  servlet. similar to chap 3 JWA, but this is created as part of maven archetype when project created -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -22,7 +23,8 @@
             <scope>provided</scope>
         </dependency>
         
-        <!--  jsp dependencies added by chap 3.  note also webxml jsp block that calls base.jspf-->
+<!--  jsp servlet dependencies added by chap 4.  note also webxml jsp block that calls base.jspf-->
+<!-- term notation: dependencies are in POM, directives are in web.xml -->
 		<dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
@@ -58,6 +60,14 @@
             </exclusions>
         </dependency>
         
+<!-- jsp expression language- introduced JWA chap 6 pg 143 -->
+        <dependency>
+        	<groupId>javax.el</groupId>
+        	<artifactId>javax.el-api</artifactId>
+        	<version>3.0.0</version>
+        	<scope>provided</scope>
+        </dependency>
+        
     </dependencies>
 
     <build>
@@ -89,5 +99,5 @@
             </plugin>
         </plugins>
     </build>
-
+<!-- see bookmarked youtube maven demo- could add tag set to launch tomcat/server if desired -->
 </project>

@@ -8,7 +8,7 @@
 	<h2>Create a Ticket</h2>
 	<form method="POST" action="tickets" enctype="multipart/form-data">
 		<input type="hidden" name="action" value="create">
-<!-- 	name field removed from ticket creation when chap 5 session added- uses logged in user name -->
+<!-- 	name field removed from ticket creation when chap 5 session added- uses logged in username -->
 <!-- 		Your Name<br> -->
 <!-- 		<input type="text" name="customerName"><br><br> -->
 		Subject<br>

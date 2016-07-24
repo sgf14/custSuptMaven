@@ -1,9 +1,13 @@
 <%@ page language="java" import="java.util.Map" %>
+<!-- an attempt to clear error (even though already in base.jspf) didnt work -->
+<%-- <%@ page import="com.prod.custSuptMaven.Ticket" %> --%>
 
+<!-- the base.jspf imports the Ticket class, project and files error below started showing up in chap 6 changes.   -->
+<!-- project cleans, compiles and runs properly.  not sure yet how to clear the errors. -->
 <%
 	@SuppressWarnings("unchecked")
 	Map<Integer, Ticket> ticketDatabase = 
-		(Map<Integer, Ticket>)request.getAttribute("ticketDatabase");
+	(Map<Integer, Ticket>)request.getAttribute("ticketDatabase");
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
