@@ -1,4 +1,6 @@
 <%@ page language="java" %>
+<%--@elvariable id="loginFailed" type="java.lang.Boolean" --%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,14 +9,11 @@
 <body>
 	<h2>Login</h2>
 	You must login to access the customer support site.<br><br>
-	<%
-		if (((Boolean)request.getAttribute("loginFailed"))) {
-			%>
+	<c:if test="${ loginFailed }">
 			<b>The username or password you entered are not correct.  Please
 			try again.</b><br><br>
-			<%
-		}
-	%>
+	</c:if>
+	
 	<form method="POST" action="<c:url value="/login" />">
 		Username<br>
 		<input type="text" name="username" /><br><br>

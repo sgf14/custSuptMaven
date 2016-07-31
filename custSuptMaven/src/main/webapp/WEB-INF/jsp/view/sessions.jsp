@@ -1,6 +1,7 @@
 <%@ page language="java" %>
 <%@ page import="java.util.List" %>
 
+<!-- jsp expression language variables used -->
 <%-- @elvariable id="numberOfSessions" type="java.lang.Integer --%>
 
 <%!

@@ -1,3 +1,4 @@
+<!-- internal class base imports to all files- see web.xml jsp directive  chap 4, pg 97 JWA-->
 <%@ page import="com.prod.custSuptMaven.Ticket, com.prod.custSuptMaven.Attachment" %>
 
 <!-- core tag library introduced in chap 4- jsp -->
@@ -6,4 +7,3 @@
 <!-- function tag library introduced in chap 6- jsp el (expression language) pg 160 and 172-->
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<!-- internal class base imports to all files- see web.xml jsp directive  chap 4, pg 97 JWA-->
