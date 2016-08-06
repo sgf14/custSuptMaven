@@ -7,3 +7,9 @@
 <!-- function tag library introduced in chap 6- jsp el (expression language) pg 160 and 172-->
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+
+<!-- function tag library introduced in chap 8- custom tags pg 228-->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="wrox" uri="http://www.wrox.com/jsp/tld/wrox" %>
+<%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
+
