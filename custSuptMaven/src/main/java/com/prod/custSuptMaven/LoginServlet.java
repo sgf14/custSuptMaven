@@ -7,7 +7,8 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-
+//suppresses SerializedUID warning on public class- comment out or see TicketServlet for alternatives
+@SuppressWarnings("serial")
 @WebServlet (
 		name = "loginServlet",
 		urlPatterns = "/login"

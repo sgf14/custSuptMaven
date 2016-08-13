@@ -1,40 +1,14 @@
-<%@ page language="java" %>
-<%@ page import="java.util.List" %>
-
 <!-- jsp expression language variables used -->
-<%-- @elvariable id="numberOfSessions" type="java.lang.Integer --%>
+<%-- @elvariable id="timestamp" type="long --%>
+<%-- @elvariable id="numberOfSessions" type="int" --%>
+<%-- @elvariable id="sessionList" type="java.util.List<javax.servlet.http.HttpSession>" --%>
 
-<%!
-private static String toString(long timeInterval){
-	if (timeInterval < 1_000) return "less than one second";
-	if (timeInterval < 60_000) return (timeInterval / 1_000) + " seconds";
-	return "about " + (timeInterval / 60_000) + " minutes";
-}
-%>
-
-<%
-@SuppressWarnings("unchecked")
-List<HttpSession> sessions = (List<HttpSession>)request.getAttribute("sessionList");
-%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-	<title>Cust Supt- Sessions</title>
-</head>
-<body>
-	<a href="<c:url value="/login?logout" />">Logout</a>
-	<h2>Sessions</h2>
+<template:basic htmlTitle="Active Sessions" bodyTitle="Active Sessions">
 	There are a total of ${numberOfSessions} active sessions in this application.<br><br>
-	<%
-		long timestamp = System.currentTimeMillis();
-		for(HttpSession aSession : sessions){
-			out.print(aSession.getId() + " - " + aSession.getAttribute("username"));
-			if(aSession.getId().equals(session.getId()))
-				out.print(" (you)");
-			out.print(" - last active " + 
-				toString(timestamp - aSession.getLastAccessedTime()));
-			out.println(" ago<br>");
-		}
-	%>
-</body>
-</html>
+	<c:forEach items="${sessionList}" var="s">
+		<c:out value="${s.id} - ${s.getAttribute('username')}" />
+		<c:if test="${s.id == pageContext.session.id}">&nbsp;(you)</c:if>
+		&nbsp;- last active
+		${wrox:timeIntervalToString(timestamp - s.lastAccessedTime)} ago<br>
+		</c:forEach>
+</template:basic>

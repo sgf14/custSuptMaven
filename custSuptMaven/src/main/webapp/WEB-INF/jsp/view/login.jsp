@@ -1,13 +1,7 @@
 <%@ page language="java" %>
 <%--@elvariable id="loginFailed" type="java.lang.Boolean" --%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-	<title>Customer Support</title>
-</head>
-<body>
-	<h2>Login</h2>
+<template:loggedOut htmlTitle="Log In" bodyTitle="Log In">
 	You must login to access the customer support site.<br><br>
 	<c:if test="${ loginFailed }">
 			<b>The username or password you entered are not correct.  Please
@@ -21,5 +15,4 @@
 		<input type="text" name="password" /><br><br>
 		<input type="submit" value="Log In"/>
 	</form>
-</body>
-</html>
+</template:loggedOut>
