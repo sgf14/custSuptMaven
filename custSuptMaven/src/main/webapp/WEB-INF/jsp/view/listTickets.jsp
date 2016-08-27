@@ -7,6 +7,7 @@
 			<i>There are no tickets in the system</i>
 		</c:when>
 		<c:otherwise>
+<!-- 		cycle through tickets -->
 			<c:forEach items="${ticketDatabase}" var="entry">
 				Ticket ${entry.key}: <a href="<c:url value="/tickets">
 					<c:param name="action" value="view" />
