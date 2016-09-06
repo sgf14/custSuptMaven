@@ -1,5 +1,6 @@
 package com.prod.custSuptMaven.chat;
-//class to encode and decode ChatMessage's(.java) utilizing Jackson Data Processor- see POM.XML dependency additions
+//class to encode and decode ChatMessage's(.java) to Binary stream and JSON utilizing Jackson Data Processor- see POM.XML dependency additions
+//binary to json from server to browser.  reverse for incoming to server
 //required to support WebSocket api so app can send and receive messages
 import java.io.IOException;
 import java.io.InputStream;
