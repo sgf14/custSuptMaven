@@ -1,5 +1,7 @@
 package com.prod.custSuptMaven;
-
+// class supports log4j logging,chapter 11.  requires some changes to Configurator.java also.  see pg 319 along w/ 
+// src/main/resources/log4j2.xml file and pg 313.
+// from customer-support-v9 import plus some file modifications as noted 
 import java.io.IOException;
 import java.util.UUID;
 

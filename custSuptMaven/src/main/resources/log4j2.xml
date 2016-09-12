@@ -10,6 +10,8 @@
         <RollingFile name="WroxFileAppender" fileName="C:/Program Files/Apache/apache-tomcat-8.0.35/logs/support.log"
                      filePattern="C:/Program Files/Apache/apache-tomcat-8.0.35/logs/support-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout>
+<!--             see apache log man website for field definitions.  book marked, but also on page 315. -->
+<!-- X{} is also called a fish tag- pg 316 for assoc java class.  Gets user specific detail (amongst others) as enabled in LoggingFilter.java -->
                 <pattern>%d{HH:mm:ss.SSS} [%t] %X{id} %X{username} %-5level %c{36} %l: %msg%n</pattern>
             </PatternLayout>
             <Policies>

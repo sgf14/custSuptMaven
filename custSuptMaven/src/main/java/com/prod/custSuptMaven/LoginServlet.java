@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LoginServlet extends HttpServlet {
 	//logger note- there are loggers added in each java class per customer-support-v9.  
-	//at this time only added loggers to this one class for testing. would want to log as new classes are built at minimum
+	//at this time only added loggers to this one LoginServlet class for testing. would want to log as new classes are built at minimum
 	private static final Logger log = LogManager.getLogger();
 	private static final Map<String, String> userDatabase = new Hashtable<>();
 	
