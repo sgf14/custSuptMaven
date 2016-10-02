@@ -24,7 +24,7 @@
         <root level="warn">
             <appender-ref ref="Console" />
         </root>
-<!--         had to change name from book default to match project- otherwise messages dont get logged -->
+<!--         make sure class path for project is correct when using this as template. Otherwise messages dont get logged -->
         <logger name="com.prod.custSuptMaven" level="info">
             <appender-ref ref="WroxFileAppender" />
         </logger>
