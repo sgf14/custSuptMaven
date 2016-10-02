@@ -1,5 +1,6 @@
 package com.prod.custSuptMaven;
 //Ticket starts chap 3, pg 67
+import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ public class Ticket{
     private String subject;
     private String body;
     private Map<String, Attachment> attachments = new LinkedHashMap<>();
+    private OffsetDateTime dateCreated;
     
     //getters and setters
     public String getCustomerName(){
@@ -51,5 +53,13 @@ public class Ticket{
 
     public int getNumberOfAttachments(){
         return this.attachments.size();
+    }
+    
+    public OffsetDateTime getDateCreated(){
+        return dateCreated;
+    }
+
+    public void setDateCreated(OffsetDateTime dateCreated){
+        this.dateCreated = dateCreated;
     }
 }

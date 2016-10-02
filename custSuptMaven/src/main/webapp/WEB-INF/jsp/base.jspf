@@ -1,9 +1,12 @@
-<%@ page import="com.prod.custSuptMaven.Ticket, com.prod.custSuptMaven.Attachment" %>
-
 <!-- core tag library introduced in chap 4- jsp -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- function tag library introduced in chap 6- jsp el (expression language) pg 160 and 172-->
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<!-- internal class base imports to all files- see web.xml jsp directive  chap 4, pg 97 JWA-->
+
+<!-- function tag library introduced in chap 8- custom tags pg 228-->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="wrox" uri="http://www.wrox.com/jsp/tld/wrox" %>
+<%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
+

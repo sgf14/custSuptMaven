@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+<!--         see pg 315- had to change this from book default path of ../logs/support.log -->
+<!-- but this version does create a log file and works -->
+        <RollingFile name="WroxFileAppender" fileName="C:/Program Files/Apache/apache-tomcat-8.0.35/logs/support.log"
+                     filePattern="C:/Program Files/Apache/apache-tomcat-8.0.35/logs/support-%d{MM-dd-yyyy}-%i.log">
+            <PatternLayout>
+<!--             see apache log man website for field definitions.  book marked, but also on page 315. -->
+<!-- X{} is also called a fish tag- pg 316 for assoc java class.  Gets user specific detail (amongst others) as enabled in LoggingFilter.java -->
+                <pattern>%d{HH:mm:ss.SSS} [%t] %X{id} %X{username} %-5level %c{36} %l: %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="4" />
+        </RollingFile>
+    </appenders>
+    <loggers>
+        <root level="warn">
+            <appender-ref ref="Console" />
+        </root>
+<!--         make sure class path for project is correct when using this as template. Otherwise messages dont get logged -->
+        <logger name="com.prod.custSuptMaven" level="info">
+            <appender-ref ref="WroxFileAppender" />
+        </logger>
+        <logger name="org.apache" level="info">
+            <appender-ref ref="WroxFileAppender" />
+        </logger>
+    </loggers>
+</configuration>
+

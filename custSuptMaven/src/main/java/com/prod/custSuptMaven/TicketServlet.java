@@ -3,6 +3,7 @@ package com.prod.custSuptMaven;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.OffsetDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,6 +30,10 @@ import com.prod.custSuptMaven.Attachment;
 		)
 
 public class TicketServlet extends HttpServlet {
+	//serialUID warning elimination testing.
+	//private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6350788313134178142L;
+
 	private volatile int TICKET_ID_SEQUENCE = 1;
 	
 	//temporary hashMap database for use until persistence is setup later in book
@@ -41,10 +46,11 @@ public class TicketServlet extends HttpServlet {
 		String action = request.getParameter("action");
 		
 		//ensures user is logged in. otherwise they could still access the pages with the right url string. chap 5 addition
-		if(request.getSession().getAttribute("username") == null) {
-			response.sendRedirect("login");
-			return;
-		}
+		//subsequently replaced by chapter 8 filter function- see pg 254.
+//		if(request.getSession().getAttribute("username") == null) {
+//			response.sendRedirect("login");
+//			return;
+//		}
 		
 		if (action == null) action = "list";
 		
@@ -71,12 +77,13 @@ public class TicketServlet extends HttpServlet {
 		String action = request.getParameter("action");
 		
 		//ensures user is logged in. otherwise they could still access the pages with the right url string. chap 5 addition
-		if(request.getSession().getAttribute("username") == null) {
-			response.sendRedirect("login");
-			//ensures method exits out and base dir entry 'localhost/custSuptMaven/' goes to /login and not /tickets (which 
-			//produces http/java error.  note return still works with void in method because it is not returning a variable.
-			return;
-		}		
+		//subsequently replaced by chapter 8 filter function- see pg 254.
+//		if(request.getSession().getAttribute("username") == null) {
+//			response.sendRedirect("login");
+//			//ensures method exits out and base dir entry 'localhost/custSuptMaven/' goes to /login and not /tickets (which 
+//			//produces http/java error.  note return still works with void in method because it is not returning a variable.
+//			return;
+//		}		
 		
 		if (action == null) action = "list";
 			
@@ -150,6 +157,7 @@ public class TicketServlet extends HttpServlet {
 		ticket.setCustomerName((String)request.getSession().getAttribute("username"));
 		ticket.setSubject(request.getParameter("subject"));
 		ticket.setBody(request.getParameter("body"));
+		ticket.setDateCreated(OffsetDateTime.now());
 		
 		Part filePart = request.getPart("file1");
 		if(filePart != null && filePart.getSize() > 0) {
