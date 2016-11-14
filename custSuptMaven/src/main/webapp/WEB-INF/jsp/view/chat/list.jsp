@@ -1,4 +1,4 @@
-<%--@elvariable id="sessions" type="java.util.List<com.wrox.chat.ChatSession>"--%>
+<%--@elvariable id="sessions" type="java.util.List<com.prod.custSuptMaven.chat.ChatSession>"--%>
 <template:basic htmlTitle="Support Chat" bodyTitle="Support Chat Requests">
     <c:choose>
         <c:when test="${fn:length(sessions) == 0}">
@@ -13,10 +13,10 @@
         </c:otherwise>
     </c:choose>
     <script type="text/javascript" language="javascript">
-        var join = function(id) {
-            postInvisibleForm('<c:url value="/chat" />', {
-                action: 'join', chatSessionId: id
-            });
-        };
+    var join = function(id) {
+        postInvisibleForm(
+                '<c:url value="/chat/join/{id}" />'.replace('{id}', id), { }
+        );
+    };
     </script>
 </template:basic>
