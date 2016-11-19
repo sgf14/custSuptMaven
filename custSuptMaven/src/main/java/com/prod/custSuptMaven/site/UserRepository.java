@@ -1,7 +1,9 @@
 package com.prod.custSuptMaven.site;
 
-public interface UserRepository
+import com.prod.custSuptMaven.site.entities.UserPrincipal;
+
+public interface UserRepository extends GenericRepository<Long, UserPrincipal>
 {
-    String getPasswordForUser(String username);
+    UserPrincipal getByUsername(String username);
 }
 

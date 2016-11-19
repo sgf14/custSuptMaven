@@ -180,6 +180,7 @@
             <scope>compile</scope>
         </dependency>
 <!-- Hibernate Bean validator- introduced JWA chap 16 -->
+<!-- intentionally do not have maven dependency listed on pg 457 annotation processor.  may add later -->
         <dependency>
         	<groupId>javax.validation</groupId>
         	<artifactId>validation-api</artifactId>
