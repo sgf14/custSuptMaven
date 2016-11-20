@@ -15,16 +15,14 @@ import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-
-
-//import com.prod.custSuptMaven.config.RootContextConfiguration;
-//import com.prod.custSuptMaven.config.ServletContextConfiguration;
+import com.prod.custSuptMaven.config.RootContextConfiguration;
+import com.prod.custSuptMaven.config.WebServletContextConfiguration;
 import com.prod.custSuptMaven.site.AuthenticationFilter;
 import com.prod.custSuptMaven.site.LoggingFilter;
 import com.prod.custSuptMaven.site.SessionListener;
-import com.wrox.config.RestServletContextConfiguration;
+import com.prod.custSuptMaven.config.RestServletContextConfiguration;
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class Bootstrap implements WebApplicationInitializer {
 	@Override
     public void onStartup(ServletContext container) throws ServletException
@@ -41,9 +39,9 @@ public class Bootstrap implements WebApplicationInitializer {
         container.addListener(SessionListener.class);
         
         //servlet context registers all Web servers (ie @Controller methods and by convention ending in ..Controller in site package)
-        AnnotationConfigWebApplicationContext servletContext =
+        AnnotationConfigWebApplicationContext webContext =
                 new AnnotationConfigWebApplicationContext();
-        servletContext.register(WebServletContextConfiguration.class);
+        webContext.register(WebServletContextConfiguration.class);
         ServletRegistration.Dynamic dispatcher = container.addServlet(
                 "springWebDispatcher", new DispatcherServlet(webContext)
         );
@@ -64,6 +62,10 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher = container.addServlet("springRestDispatcher", restServlet);
         dispatcher.setLoadOnStartup(2);
         dispatcher.addMapping("/services/Rest/*");
+        
+        //SOAP services (xml) not implemented in this project, only REST(json).  if SOAP utilized, then a similar method to REST above
+        //would be needed here.  see customer-service-v15 for example
+        
         
         // following code blocks replaced customer-support-v8 Configurator class.  see chap 13,pg384.
         // since Bootstrap.. now configures commons/Servlet API features

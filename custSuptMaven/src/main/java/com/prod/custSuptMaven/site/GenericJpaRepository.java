@@ -1,7 +1,9 @@
 package com.prod.custSuptMaven.site;
-/* class notes.  JWA chap 21, pg 616.  extends GenericBase Repo class and implements JPA specific functions.  The end classes then extend this
- * class for the different tables in which data is being saved to in MySQL.  it defines the EntityManager created by config/RootContextConfig
- * and correlates those to the CRUD actions in GenericRepo class.
+/* class notes.  JWA chap 21, pg 616.  this extends GenericBase Repo class and implements JPA specific CRUD functions.  
+ * unlike GenericRepository class that only performs the CRUD setup used by the interfaces.
+ * 1) GenericRepository is extended by xxRepository interfaces and
+ * 2) GenericJpaRepository is extended by DefaultxxRepository classes
+ * Both work to then save data to the specifc MySQL table via the respective Entity.  
  */
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

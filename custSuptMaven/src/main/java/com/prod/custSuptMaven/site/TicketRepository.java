@@ -1,12 +1,9 @@
 package com.prod.custSuptMaven.site;
 
-import java.util.List;
+import com.prod.custSuptMaven.site.entities.TicketEntity;
 
-public interface TicketRepository
+public interface TicketRepository extends GenericRepository<Long, TicketEntity>
 {
-    List<Ticket> getAll();
-    Ticket get(long id);
-    void add(Ticket ticket);
-    void update(Ticket ticket);
+    
 }
 

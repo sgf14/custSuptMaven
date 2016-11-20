@@ -1,5 +1,6 @@
 <%--@elvariable id="chatSessionId" type="long"--%>
-<template:basic htmlTitle="Support Chat" bodyTitle="Support Chat">
+<spring:message code="title.chat" var="chatTitle" />
+<template:basic htmlTitle="${chatTitle}" bodyTitle="${chatTitle}">
     <jsp:attribute name="extraHeadContent">
         <link rel="stylesheet"
               href="<c:url value="/resource/stylesheet/chat.css" />" />
@@ -14,18 +15,18 @@
                 <textarea id="messageArea"></textarea>
             </div>
             <div id="buttonContainer">
-                <button class="btn btn-primary" onclick="send();">Send</button>
-                <button class="btn" onclick="disconnect();">Disconnect</button>
+                <button class="btn btn-primary" onclick="send();"><spring:message code="button.chat.send" /></button>
+                <button class="btn" onclick="disconnect();"><spring:message code="button.chat.disconnect" /></button>
             </div>
         </div>
         <div id="modalError" class="modal hide fade">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3>Error</h3>
+                <h3><spring:message code="window.chat.error" /></h3>
             </div>
-            <div class="modal-body" id="modalErrorBody">A blah error occurred.</div>
+            <div class="modal-body" id="modalErrorBody"><spring:message code="error.chat.unknown" /></div>
             <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">OK</button>
+                <button class="btn btn-primary" data-dismiss="modal"><spring:message code="button.chat.error.dismiss" /></button>
             </div>
         </div>
         <script type="text/javascript" language="javascript">
@@ -39,9 +40,7 @@
                 var otherJoined = false;
 
                 if(!("WebSocket" in window)) {
-                    modalErrorBody.text('WebSockets are not supported in this ' +
-                            'browser. Try Internet Explorer 10 or the latest ' +
-                            'versions of Mozilla Firefox or Google Chrome.');
+                    modalErrorBody.text('<spring:message code="error.chat.websocket.unsupported" javaScriptEscape="true" />');
                     modalError.modal('show');
                     return;
                 }
@@ -50,7 +49,13 @@
                     chatLog.append($('<div>').addClass('informational')
                             .text(moment().format('h:mm:ss a') + ': ' + m));
                 };
-                infoMessage('Connecting to the chat server...');
+                infoMessage('<spring:message code="message.chat.connecting" javaScriptEscape="true" />');
+                
+//                 var messageContent = function(message) {
+//                     return message.userContent && message.userContent != null &&
+//                             message.userContent.length > 0 ?
+//                             message.userContent : message.localizedContent;
+//                 };
 
                 var objectMessage = function(message) {
                     var log = $('<div>');
@@ -81,15 +86,15 @@
                 }
 
                 server.onopen = function(event) {
-                    infoMessage('Connected to the chat server.');
+                    infoMessage('<spring:message code="message.chat.connected" javaScriptEscape="true" />');
                 };
 
                 server.onclose = function(event) {
                     if(server != null)
-                        infoMessage('Disconnected from the chat server.');
+                        infoMessage('<spring:message code="message.chat.disconnected" javaScriptEscape="true" />');
                     server = null;
                     if(!event.wasClean || event.code != 1000) {
-                        modalErrorBody.text('Code ' + event.code + ': ' +
+                        modalErrorBody.text('<spring:message code="error.chat.code" javaScriptEscape="true" /> ' + event.code + ': ' +
                                 event.reason);
                         modalError.modal('show');
                     }
@@ -109,23 +114,23 @@
                         if(message.type == 'JOINED') {
                             otherJoined = true;
                             if(username != message.user)
-                                infoMessage('You are now chatting with ' +
-                                        message.user + '.');
+                                infoMessage('<spring:message code="message.chat.joined" javaScriptEscape="true" />'
+                                		.replace('{0}', message.user));
                         }
                     } else {
-                        modalErrorBody.text('Unexpected data type [' +
-                                typeof(event.data) + '].');
+                        modalErrorBody.text('<spring:message code="error.chat.unexpected.type" javaScriptEscape="true" />'
+                        		.replace('{0}', typeof(event.data)));
                         modalError.modal('show');
                     }
                 };
 
                 send = function() {
                     if(server == null) {
-                        modalErrorBody.text('You are not connected!');
+                        modalErrorBody.text('<spring:message code="error.chat.not.connected" javaScriptEscape="true" />');
                         modalError.modal('show');
                     } else if(!otherJoined) {
                         modalErrorBody.text(
-                                'The other user has not joined the chat yet.');
+                                '<spring:message code="error.chat.not.joined" javaScriptEscape="true" />');
                         modalError.modal('show');
                     } else if(messageArea.get(0).value.trim().length > 0) {
                         var message = {
@@ -151,7 +156,7 @@
 
                 disconnect = function() {
                     if(server != null) {
-                        infoMessage('Disconnected from the chat server.');
+                        infoMessage('<spring:message code="message.chat.disconnected" javaScriptEscape="true" />');
                         server.close();
                         server = null;
                     }

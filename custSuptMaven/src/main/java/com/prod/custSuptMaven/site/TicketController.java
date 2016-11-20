@@ -5,7 +5,7 @@ package com.prod.custSuptMaven.site;
  */
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,13 +14,20 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.prod.custSuptMaven.config.annotation.WebController;
+import com.prod.custSuptMaven.site.entities.Attachment;
+import com.prod.custSuptMaven.site.validation.NotBlank;
+
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@WebController
 @RequestMapping("ticket")
 public class TicketController
 {
@@ -84,9 +91,12 @@ public class TicketController
      * compare to TicketServlet class/ createTicket method.  Spring makes this simpler.
      */
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public View create(Principal principal, Form form) throws IOException
+    public ModelAndView create(Principal principal, @Valid TicketForm form, Errors errors, Map<String, Object> model) throws IOException
     {
-        Ticket ticket = new Ticket();
+        if(errors.hasErrors())
+        	return new ModelAndView("ticket/add");
+        
+    	Ticket ticket = new Ticket();
         ticket.setCustomerName(principal.getName());
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
@@ -105,9 +115,17 @@ public class TicketController
                 ticket.addAttachment(attachment);
         }
 
-        this.ticketService.save(ticket);
+        try {
+        	this.ticketService.save(ticket);
+        } catch (ConstraintViolationException e) {
         //redirect to a view after creation
-        return new RedirectView("/ticket/view/" + ticket.getId(), true, false);
+        	model.put("validationErrors", e.getConstraintViolations());
+        	return new ModelAndView("ticket/add");
+        }
+        
+        return new ModelAndView(new RedirectView(
+        		"/ticket/view/" + ticket.getId(), true, false
+        		));
     }
 
     private ModelAndView getListRedirectModelAndView()
@@ -121,11 +139,14 @@ public class TicketController
     }
     
     //spring form class-used above- utilizing MultipartFile for file attachment vs. Ticket.java class in -v9
-    public static class Form
+    public static class TicketForm
     {
-        private String subject;
-        private String body;
-        private List<MultipartFile> attachments;
+    	@NotBlank(message = "{validate.ticket.subject}")
+    	private String subject;
+    	@NotBlank(message = "{validate.ticket.body}")
+    	private String body;
+    	@NotBlank(message = "{validate.ticket.attachments}")
+    	private List<MultipartFile> attachments;
 
         public String getSubject()
         {

@@ -2,14 +2,16 @@ package com.prod.custSuptMaven.site;
 //part of MVC-CSR- this Controller(C in CSR) replaced SessionListServlet typical of Spring Controllers replacing servlet classes
 //see chap 13, pg 385
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.prod.custSuptMaven.config.annotation.WebController;
+
 import javax.inject.Inject;
+
 import java.util.Map;
 
-@Controller
+@WebController
 @RequestMapping("session")
 public class SessionListController
 {

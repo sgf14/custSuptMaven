@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.ThreadContext;
+import com.prod.custSuptMaven.site.entities.UserPrincipal;
 
 public class LoggingFilter implements Filter {
 	@Override

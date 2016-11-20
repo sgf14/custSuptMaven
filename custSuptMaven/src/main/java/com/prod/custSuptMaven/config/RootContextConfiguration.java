@@ -98,7 +98,8 @@ public class RootContextConfiguration
         JndiDataSourceLookup lookup = new JndiDataSourceLookup();
         return lookup.getDataSource("jdbc/CustomerSupport");
     }
-    //Spring version of ORM EntityManagerFactory
+    //Spring version of ORM EntityManagerFactory.  this is referenced by @Entity annotation for classes in site/entities package
+    // need both this method and Tomcat/context.xml mods to be able to connect to db.  see pg 632 for customer support project specifically.
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean()
     {

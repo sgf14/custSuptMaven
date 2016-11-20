@@ -1,13 +1,26 @@
 <%--@elvariable id="ticketForm" type="com.prod.custSuptMaven.site.TicketController.Form"--%>
-<template:basic htmlTitle="Create a Ticket" bodyTitle="Create a Ticket">
+<%--@elvariable id="validationErrors" type="java.util.Set<javax.validation.ConstraintViolation>"--%>
+<spring:message code="title.ticketAdd" var="addTitle" />
+<template:basic htmlTitle="${addTitle}" bodyTitle="${addTitle}">
+	<c:if test="${validationErrors != null}"><div class="errors">
+        <ul>
+            <c:forEach items="${validationErrors}" var="error">
+                <li><c:out value="${error.message}" /></li>
+            </c:forEach>
+        </ul>
+    </div>
+    </c:if>
     <form:form method="post" enctype="multipart/form-data"
                modelAttribute="ticketForm">
-        <form:label path="subject">Subject</form:label><br />
-        <form:input path="subject"/><br /><br />
-        <form:label path="body">Body</form:label><br />
-        <form:textarea path="body" rows="5" cols="30" /><br /><br />
-        <b>Attachments</b><br />
-        <input type="file" name="attachments" multiple="multiple"/><br /><br />
-        <input type="submit" value="Submit"/>
+        <form:label path="subject"><spring:message code="field.ticket.subject" /></form:label><br />
+        <form:input path="subject"/><br />
+        <form:errors path="subject" cssClass="errors" /><br /><br />
+        <form:label path="body"><spring:message code="field.ticket.body" /></form:label><br />
+        <form:textarea path="body" rows="5" cols="30" /><br />
+        <form:errors path="body" cssClass="errors" /><br /><br />
+        <b><spring:message code="field.ticket.attachments" /></b><br />
+        <input type="file" name="attachments" multiple="multiple"/><br />
+        <form:errors path="attachments" cssClass="errors" /><br /><br />
+        <input type="submit" value="<spring:message code="button.ticket.submit" />"/>
     </form:form>
 </template:basic>
