@@ -29,6 +29,8 @@ public class ChatMessageCodec implements Encoder.BinaryStream<ChatMessage>,
 	static {
 		MAPPER.findAndRegisterModules();
 		MAPPER.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+		MAPPER.addMixInAnnotations(ChatMessage.class,
+                ChatMessage.MixInForWebSocket.class);
 	}
 	
 	@Override

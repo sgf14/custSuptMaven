@@ -3,11 +3,14 @@ package com.prod.custSuptMaven.site.chat;
 //more Service implementations could be added as needed. (the idea behind using an interface)
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Instant;
@@ -121,6 +124,13 @@ public class DefaultChatService implements ChatService
     public List<ChatSession> getPendingSessions()
     {
         return new ArrayList<>(this.pendingSessions.values());
+    }
+    
+    @PostConstruct
+    public void initialize()
+    {
+        this.objectMapper.addMixInAnnotations(ChatMessage.class,
+                ChatMessage.MixInForLogWrite.class);
     }
 
     private synchronized long getNextSessionId()

@@ -1,5 +1,7 @@
-//added in chap 5- sessions as part of group to track and display HTTP sessions.  see JWA pg 133
 package com.prod.custSuptMaven.site;
+/* added in chap 5- sessions as part of group to track and display HTTP sessions.  see JWA pg 133
+ * 
+ */
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

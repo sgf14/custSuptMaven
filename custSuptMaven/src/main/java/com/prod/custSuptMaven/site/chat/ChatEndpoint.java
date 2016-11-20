@@ -7,7 +7,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.prod.custSuptMaven.site.SessionRegistry;
-import com.prod.custSuptMaven.site.UserPrincipal;
+import com.prod.custSuptMaven.site.entities.UserPrincipal;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

@@ -1,16 +1,21 @@
 package com.prod.custSuptMaven.site.chat;
-//class notes: in MVC model, this is the C (controller) for the chat functionality.  See Authenticator grouping for more details.
-//similar to others upon Spring conversion. This Controller replaced the ChatServlet class in customer-support-v8 version.
-import org.springframework.stereotype.Controller;
+/* class notes: in MVC model, this is the C (controller) for the chat functionality.  See Authenticator grouping for more details.
+ * similar to others upon Spring conversion. This Controller replaced the ChatServlet class in customer-support-v8 version.
+ */
+
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.prod.custSuptMaven.config.annotation.WebController;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
+
 import java.util.Map;
 
-@Controller
+@WebController
 @RequestMapping("chat")
 public class ChatController
 {

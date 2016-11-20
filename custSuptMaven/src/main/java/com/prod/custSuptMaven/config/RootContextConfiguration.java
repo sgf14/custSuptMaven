@@ -95,7 +95,8 @@ public class RootContextConfiguration
     @Bean
     public DataSource customerSupportDataSource()
     {
-        JndiDataSourceLookup lookup = new JndiDataSourceLookup();
+        //in this case using same mysql db as the customer-support-v15 project.  tomcat context.xml is updated
+    	JndiDataSourceLookup lookup = new JndiDataSourceLookup();
         return lookup.getDataSource("jdbc/CustomerSupport");
     }
     //Spring version of ORM EntityManagerFactory.  this is referenced by @Entity annotation for classes in site/entities package

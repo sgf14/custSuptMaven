@@ -83,7 +83,7 @@ public class TicketController
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public String create(Map<String, Object> model)
     {
-        model.put("ticketForm", new Form());
+        model.put("ticketForm", new TicketForm());
         return "ticket/add";
     }
     
