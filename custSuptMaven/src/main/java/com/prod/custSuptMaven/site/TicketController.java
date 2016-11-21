@@ -21,6 +21,7 @@ import com.prod.custSuptMaven.site.validation.NotBlank;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -145,7 +146,7 @@ public class TicketController
     	private String subject;
     	@NotBlank(message = "{validate.ticket.body}")
     	private String body;
-    	@NotBlank(message = "{validate.ticket.attachments}")
+    	@NotNull(message = "{validate.ticket.attachments}")
     	private List<MultipartFile> attachments;
 
         public String getSubject()

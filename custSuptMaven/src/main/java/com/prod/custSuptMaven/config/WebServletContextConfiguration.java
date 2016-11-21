@@ -21,11 +21,15 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.RequestToViewNameTranslator;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -99,6 +103,20 @@ public class WebServletContextConfiguration extends WebMvcConfigurerAdapter
     public Validator getValidator()
     {
         return this.validator;
+    }
+    
+    @Override
+    public void addInterceptors(InterceptorRegistry registry)
+    {
+        super.addInterceptors(registry);
+
+        registry.addInterceptor(new LocaleChangeInterceptor());
+    }
+
+    @Bean
+    public LocaleResolver localeResolver()
+    {
+        return new SessionLocaleResolver();
     }
     
     //see chap 13 pg 372-3.turn @RequestMapping view names in ..Controllers into jsp file names.

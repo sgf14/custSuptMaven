@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 
 import java.security.Principal;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class AuthenticationController
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public ModelAndView login(Map<String, Object> model, HttpSession session,
-                              HttpServletRequest request, LoginForm form, Errors errors)
+                              HttpServletRequest request, @Valid LoginForm form, Errors errors)
     {
         if(UserPrincipal.getPrincipal(session) != null)
             return this.getTicketRedirect();

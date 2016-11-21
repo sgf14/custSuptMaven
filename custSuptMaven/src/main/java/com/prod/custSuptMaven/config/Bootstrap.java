@@ -14,15 +14,15 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.ws.transport.http.MessageDispatcherServlet;
 
-import com.prod.custSuptMaven.config.RootContextConfiguration;
-import com.prod.custSuptMaven.config.WebServletContextConfiguration;
 import com.prod.custSuptMaven.site.AuthenticationFilter;
 import com.prod.custSuptMaven.site.LoggingFilter;
 import com.prod.custSuptMaven.site.SessionListener;
-import com.prod.custSuptMaven.config.RestServletContextConfiguration;
+import com.prod.custSuptMaven.config.RootContextConfiguration;
 
-//@SuppressWarnings("unused")
+
+@SuppressWarnings("unused")
 public class Bootstrap implements WebApplicationInitializer {
 	@Override
     public void onStartup(ServletContext container) throws ServletException
@@ -63,8 +63,16 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(2);
         dispatcher.addMapping("/services/Rest/*");
         
-        //SOAP services (xml) not implemented in this project, only REST(json).  if SOAP utilized, then a similar method to REST above
-        //would be needed here.  see customer-service-v15 for example
+        //SOAP services (xml)- in addition to REST(json).  
+//        AnnotationConfigWebApplicationContext soapContext =
+//                new AnnotationConfigWebApplicationContext();
+//        soapContext.register(SoapServletContextConfiguration.class);
+//        MessageDispatcherServlet soapServlet =
+//                new MessageDispatcherServlet(soapContext);
+//        soapServlet.setTransformWsdlLocations(true);
+//        dispatcher = container.addServlet("springSoapDispatcher", soapServlet);
+//        dispatcher.setLoadOnStartup(3);
+//        dispatcher.addMapping("/services/Soap/*");
         
         
         // following code blocks replaced customer-support-v8 Configurator class.  see chap 13,pg384.

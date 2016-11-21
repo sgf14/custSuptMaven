@@ -51,11 +51,11 @@
                 };
                 infoMessage('<spring:message code="message.chat.connecting" javaScriptEscape="true" />');
                 
-//                 var messageContent = function(message) {
-//                     return message.userContent && message.userContent != null &&
-//                             message.userContent.length > 0 ?
-//                             message.userContent : message.localizedContent;
-//                 };
+                var messageContent = function(message) {
+                    return message.userContent && message.userContent != null &&
+                            message.userContent.length > 0 ?
+                            message.userContent : message.localizedContent;
+                };
 
                 var objectMessage = function(message) {
                     var log = $('<div>');
@@ -65,11 +65,11 @@
                         var c = message.user == username ? 'user-me' : 'user-you';
                         log.append($('<span>').addClass(c)
                                         .text(date+' '+message.user+':\xA0'))
-                                .append($('<span>').text(message.content));
+                                .append($('<span>').text(messageContent(message)));
                     } else {
                         log.addClass(message.type == 'ERROR' ? 'error' :
                                 'informational')
-                                .text(date + ' ' + message.content);
+                                .text(date + ' ' + messageContent(message));
                     }
                     chatLog.append(log);
                 };

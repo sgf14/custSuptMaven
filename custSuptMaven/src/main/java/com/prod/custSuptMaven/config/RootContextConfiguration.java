@@ -9,10 +9,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -33,6 +35,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -41,7 +44,7 @@ import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
 import javax.sql.DataSource;
 //see chap 14, pg 395 for good description of this annotation group and its relation to rootContext. affects @Component, @Service
-//@Repository, but not @Controller- which is handled by ServletContext
+//and the @Repository, but not @Controller- which is handled by ServletContext
 @Configuration
 //following annotations support websocket/chat function and SQL
 @EnableScheduling
@@ -67,10 +70,41 @@ public class RootContextConfiguration
     private static final Logger schedulingLogger =
             LogManager.getLogger(log.getName() + ".[scheduling]");
     
-    //Internationalization not established in this project.  JWA has some Internationalization commons methods in this location.  See chap 15, if additions are needed.
+    //Internationalization see chap 15. commons methods in this location.  See chap 15, if additions are needed.
+    @Bean
+    public MessageSource messageSource()
+    {
+        ReloadableResourceBundleMessageSource messageSource =
+                new ReloadableResourceBundleMessageSource();
+        messageSource.setCacheSeconds(-1);
+        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        messageSource.setBasenames(
+                "/WEB-INF/i18n/titles", "/WEB-INF/i18n/messages",
+                "/WEB-INF/i18n/errors", "/WEB-INF/i18n/validation"
+        );
+        return messageSource;
+    }
+
+    @Bean
+    public LocalValidatorFactoryBean localValidatorFactoryBean()
+    {
+        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+        validator.setValidationMessageSource(this.messageSource());
+        return validator;
+    }
+
+    @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor()
+    {
+        MethodValidationPostProcessor processor =
+                new MethodValidationPostProcessor();
+        processor.setValidator(this.localValidatorFactoryBean());
+        return processor;
+    }
     
     //this bean used w/ @Inject in servletContext as part of jackson.databind functionality.  introduced in chap 10-websockets and chap 14 pg 377
     // for some details on objectMapper()
+    
     @Bean
     public ObjectMapper objectMapper()
     {

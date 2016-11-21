@@ -90,5 +90,11 @@ public class RestServletContextConfiguration extends WebMvcConfigurerAdapter
     {
         return this.validator;
     }
+    
+    @Bean
+    public LocaleResolver localeResolver()
+    {
+        return new AcceptHeaderLocaleResolver();
+    }
 
 }
