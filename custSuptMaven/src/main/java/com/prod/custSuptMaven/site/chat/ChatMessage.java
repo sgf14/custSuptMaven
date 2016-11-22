@@ -1,14 +1,17 @@
 package com.prod.custSuptMaven.site.chat;
-//basic POJO to instantiate variables used with the chat classes
+//basic POJO to instantiate variables used with the chat classes.  this got changed in the customer-support-v15, Peristence changes 
 import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class ChatMessage {
+public class ChatMessage implements Cloneable {
 	private Instant timestamp;
     private Type type;
     private String user;
-    private String content;
+    private String contentCode;
+    private Object[] contentArguments;
+    private String localizedContent;
+    private String userContent; 
 
     public Instant getTimestamp()
     {
@@ -40,14 +43,44 @@ public class ChatMessage {
         this.user = user;
     }
 
-    public String getContent()
+    public String getContentCode()
     {
-        return content;
+        return contentCode;
     }
 
-    public void setContent(String content)
+    public void setContentCode(String contentCode)
     {
-        this.content = content;
+        this.contentCode = contentCode;
+    }
+    
+    public Object[] getContentArguments()
+    {
+        return contentArguments;
+    }
+
+    public void setContentArguments(Object... contentArguments)
+    {
+        this.contentArguments = contentArguments;
+    }
+
+    public String getLocalizedContent()
+    {
+        return localizedContent;
+    }
+
+    public void setLocalizedContent(String localizedContent)
+    {
+        this.localizedContent = localizedContent;
+    }
+
+    public String getUserContent()
+    {
+        return userContent;
+    }
+
+    public void setUserContent(String userContent)
+    {
+        this.userContent = userContent;
     }
 
     @Override

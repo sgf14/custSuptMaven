@@ -3,7 +3,6 @@ package com.prod.custSuptMaven.site.chat;
  * similar to others upon Spring conversion. This Controller replaced the ChatServlet class in customer-support-v8 version.
  */
 
-
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

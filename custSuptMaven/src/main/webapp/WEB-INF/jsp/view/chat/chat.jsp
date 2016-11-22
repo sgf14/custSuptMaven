@@ -36,7 +36,7 @@
                 var modalErrorBody = $("#modalErrorBody");
                 var chatLog = $('#chatLog');
                 var messageArea = $('#messageArea');
-                var username = '${sessionScope.username}';
+                var username = '${pageContext.request.userPrincipal.name}';
                 var otherJoined = false;
 
                 if(!("WebSocket" in window)) {
@@ -135,7 +135,7 @@
                     } else if(messageArea.get(0).value.trim().length > 0) {
                         var message = {
                             timestamp: new Date(), type: 'TEXT', user: username,
-                            content: messageArea.get(0).value
+                            userContent: messageArea.get(0).value
                         };
                         try {
                             var json = JSON.stringify(message);

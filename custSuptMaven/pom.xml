@@ -7,9 +7,12 @@
 
     <groupId>com.prod</groupId>
     <artifactId>custSuptMaven</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-
+<!--project versions
+0.0.1= spring
+1.0.1 = persistence
+-->
     <name>custSuptMaven</name>
     
 <!-- note- versions matter.  its best to use properties tag group below to keep groups of dependencies the same. 
@@ -21,8 +24,8 @@ and startup errors
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 <!-- can use these version tags so you only have to change ver # in a single place.  not used yet for jackson or logging, left commented out -->
-<!--         <jackson.version>2.4.2</jackson.version> -->
-<!--         <log4j.version>2.0.2</log4j.version> -->
+        <jackson.version>2.4.2</jackson.version>
+        <log4j.version>2.0.2</log4j.version>
         <spring.framework.version>4.0.6.RELEASE</spring.framework.version>
         <hibernate.validator.version>5.1.2.Final</hibernate.validator.version>
     </properties>
@@ -98,25 +101,25 @@ and startup errors
         <dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
         	<artifactId>jackson-core</artifactId>
-        	<version>2.3.2</version>
+        	<version>${jackson.version}</version>
         	<scope>compile</scope>
         </dependency>
         <dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
         	<artifactId>jackson-annotations</artifactId>
-        	<version>2.3.2</version>
+        	<version>${jackson.version}</version>
         	<scope>compile</scope>
         </dependency>
         <dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
         	<artifactId>jackson-databind</artifactId>
-        	<version>2.3.2</version>
+        	<version>${jackson.version}</version>
         	<scope>compile</scope>
         </dependency>
         <dependency>
         	<groupId>com.fasterxml.jackson.datatype</groupId>
         	<artifactId>jackson-datatype-jsr310</artifactId>
-        	<version>2.3.2</version>
+        	<version>${jackson.version}</version>
         	<scope>compile</scope>
         </dependency>
         
@@ -124,31 +127,31 @@ and startup errors
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-api</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
         	<scope>compile</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-core</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
         	<scope>runtime</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-jcl</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
         	<scope>runtime</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-slf4j-impl</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
         	<scope>runtime</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-taglib</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
         	<scope>runtime</scope>
         </dependency>
 <!-- SpringMVC and support- introduced JWA chap 12/13 pg 324 -->         
@@ -172,7 +175,10 @@ and startup errors
             <version>${spring.framework.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        
+<!--the hibernate orm and java persistence dependancies below are sensitive to version
+w/o the right corresponding versions you will get server errors and app wont launch
+-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-oxm</artifactId>
