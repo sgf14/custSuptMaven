@@ -1,6 +1,8 @@
 package com.prod.custSuptMaven.site;
 
 import com.prod.custSuptMaven.site.entities.UserPrincipal;
+import com.prod.custSuptMaven.site.repositories.UserRepository;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mindrot.jbcrypt.BCrypt;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -29,7 +32,7 @@ public class DefaultAuthenticationService implements AuthenticationService
             throw new IllegalStateException(e);
         }
     }
-
+//injecting this is causing a problem
     @Inject UserRepository userRepository;
 
     @Override
@@ -67,11 +70,8 @@ public class DefaultAuthenticationService implements AuthenticationService
             String salt = BCrypt.gensalt(HASHING_ROUNDS, RANDOM);
             principal.setPassword(BCrypt.hashpw(newPassword, salt).getBytes());
         }
-
-        if(principal.getId() < 1)
-            this.userRepository.add(principal);
-        else
-            this.userRepository.update(principal);
+    	//like other DefaultServices this section got changed from add()/update() to save() to match CrudRepo interface
+        this.userRepository.save(principal);
     }
 }
 

@@ -1,5 +1,7 @@
 package com.prod.custSuptMaven.site;
-
+/* Class notes- chap 17 SOAP (XML) version in conjunction with REST (JSON) server to server comm.
+ * 
+ */
 import com.prod.custSuptMaven.site.entities.Attachment;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.Namespace;

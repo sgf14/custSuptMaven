@@ -16,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -52,10 +53,16 @@ import javax.sql.DataSource;
 		mode = AdviceMode.PROXY, proxyTargetClass = false,
         order = Ordered.HIGHEST_PRECEDENCE
 )
-//SQL add.  Ensures async takes precendence over SQL transaction so transaction doesnt get partially cutoff- see pg 609
+//SQL add.  Ensures async takes precedence over SQL transaction so transaction doesnt get partially cutoff- see pg 609
 @EnableTransactionManagement(
         mode = AdviceMode.PROXY, proxyTargetClass = false,
         order = Ordered.LOWEST_PRECEDENCE
+)
+//chap 22- spring data jpa
+@EnableJpaRepositories(
+		basePackages = "com.prod.custSuptMaven.site.repositories",
+		entityManagerFactoryRef = "entityManagerFactoryBean",
+		transactionManagerRef = "jpaTransactionManager"
 )
 
 @ComponentScan(
@@ -84,7 +91,7 @@ public class RootContextConfiguration
         );
         return messageSource;
     }
-
+    //chap 16 ui data entry validation.  this and next register validation for use by downstream classes
     @Bean
     public LocalValidatorFactoryBean localValidatorFactoryBean()
     {
@@ -92,7 +99,8 @@ public class RootContextConfiguration
         validator.setValidationMessageSource(this.messageSource());
         return validator;
     }
-
+    
+    //chap 16 ui validator
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor()
     {

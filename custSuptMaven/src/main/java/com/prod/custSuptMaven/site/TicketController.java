@@ -5,6 +5,7 @@ package com.prod.custSuptMaven.site;
  */
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,7 @@ public class TicketController
     }
 
     @RequestMapping(value = "view/{ticketId}", method = RequestMethod.GET)
-    public ModelAndView view(Map<String, Object> model,
+    public ModelAndView view(Map<String, Object> model, Pageable page, 
                              @PathVariable("ticketId") long ticketId)
     {
         Ticket ticket = this.ticketService.getTicket(ticketId);
@@ -55,6 +56,8 @@ public class TicketController
             return this.getListRedirectModelAndView();
         model.put("ticketId", Long.toString(ticketId));
         model.put("ticket", ticket);
+        model.put("comments", this.ticketService.getComments(ticketId, page));
+        model.put("commentForm", new CommentForm());
         return new ModelAndView("ticket/view");
     }
 
@@ -128,6 +131,38 @@ public class TicketController
         		"/ticket/view/" + ticket.getId(), true, false
         		));
     }
+    //comments added in chap 22- spring data JPA
+    @RequestMapping(value = "comment/{ticketId}", method = RequestMethod.POST)
+    public ModelAndView comment(Principal principal, @Valid CommentForm form,
+                                Errors errors, Map<String, Object> model,
+                                Pageable page,
+                                @PathVariable("ticketId") long ticketId)
+    {
+        Ticket ticket = this.ticketService.getTicket(ticketId);
+        if(ticket == null)
+            return this.getListRedirectModelAndView();
+
+        if(errors.hasErrors())
+            return this.view(model, page, ticketId);
+
+        TicketComment comment = new TicketComment();
+        comment.setCustomerName(principal.getName());
+        comment.setBody(form.getBody());
+
+        try
+        {
+            this.ticketService.save(comment, ticketId);
+        }
+        catch(ConstraintViolationException e)
+        {
+            model.put("validationErrors", e.getConstraintViolations());
+            return this.view(model, page, ticketId);
+        }
+
+        return new ModelAndView(new RedirectView(
+                "/ticket/view/" + ticketId, true, false
+        ));
+    }
 
     private ModelAndView getListRedirectModelAndView()
     {
@@ -177,6 +212,22 @@ public class TicketController
         public void setAttachments(List<MultipartFile> attachments)
         {
             this.attachments = attachments;
+        }
+    }
+    //comment form- chap 22- supporting method
+    public static class CommentForm
+    {
+        @NotBlank(message = "{validate.ticket.comment.body}")
+        private String body;
+
+        public String getBody()
+        {
+            return body;
+        }
+
+        public void setBody(String body)
+        {
+            this.body = body;
         }
     }
 }

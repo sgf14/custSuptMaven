@@ -1,10 +1,15 @@
 package com.prod.custSuptMaven.site;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
+
+import com.prod.custSuptMaven.site.TicketComment;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
 import java.util.List;
 
 @Validated
@@ -19,5 +24,20 @@ public interface TicketService
     void save(@NotNull(message = "{validate.ticketService.save.ticket}")
               @Valid Ticket ticket);
     void deleteTicket(long id);
+    
+    @NotNull
+    Page<TicketComment> getComments(
+            @Min(value = 1L, message = "{validate.ticketService.getComments.id}")
+                long ticketId,
+            @NotNull(message = "{validate.ticketService.getComments.page}")
+                Pageable page
+    );
+    void save(
+            @NotNull(message = "{validate.ticketService.save.comment}")
+            @Valid TicketComment comment,
+            @Min(value = 1L, message = "{validate.ticketService.saveComment.id}")
+                long ticketId
+    );
+    void deleteComment(long id);
 }
 

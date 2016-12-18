@@ -10,7 +10,8 @@
     <jsp:attribute name="headContent">
         <jsp:invoke fragment="extraHeadContent" />
     </jsp:attribute>
-    <jsp:attribute name="navigationContent">
+    
+	<jsp:attribute name="navigationContent">
         <a href="<c:url value="/ticket/list" />">List Tickets</a><br />
         <a href="<c:url value="/ticket/create" />">Create a Ticket</a><br />
         <a href="javascript:void 0;"

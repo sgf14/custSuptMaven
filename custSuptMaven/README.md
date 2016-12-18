@@ -1,9 +1,14 @@
 Purpose: This Maven project created from scratch in Eclipse to build JWA book 'customer-support' app as it progresses through chapters, starting with chapter 3. Using Git and Github for version control.
 
 TODO:
-reading chap 17.
+reading chap 22. Spring Data JPA
 
 Notes/History:
+12/10:mostly finished Spring Data JPA- still need to fix UI messages for jsps (i18n folder).  Ran into a statup problem w/ a contextLoader listener failure
+  short answer need to ensure in config package(s) paths- and rootContextConfiguration class specifically that you have all the right paths.  upon edits/adaptation
+  I didnt check the path closely enough and had ..custMavenSupt.repositories instead of the correct ..custSuptMaven.site.repositories and app was throwing
+  a contextLoader failure on one of the classes (defaultAuthenticationService specifically) this took some time to diagnose.
+11/28: finished chap 21 base MySQL/Hibernate implementation.  all changes made and tested successfully.  Updated Eclipse Tomcat version context.xml file and validated compatible POM dependency versions.  Compatible versions in POM is critical.  Made it to match book, but I am not sure how you ensure how you find compatible versions on newly created projects between the different required dependencies, see POM notes.
 10/30: chap 19/20- started mySQL/HibernateORM section
 --PART III- data persistence
 10/28/16: chap 17- REST/SOAP services-machine to machine communication.  ran & tested web-service imported project and in firefox RESTClient Add-on.  have not implemented chap 17 changes into custSuptMaven at this time.  -v14 version does similar REST Service w/ Tickets as web-service did with Acccounts. It will rely on Validation items covered in chap 16.  Note web services are different than websockets discussed in chap 10 for chat functionality.

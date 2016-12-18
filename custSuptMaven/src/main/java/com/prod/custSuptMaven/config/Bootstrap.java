@@ -4,11 +4,10 @@ package com.prod.custSuptMaven.config;
  * based on POM dependencies.  if using Java vs XML instantiation then @annotation methods are used extensively in 
  * Spring MVC
  */
-import javax.servlet.FilterRegistration;
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
+import com.prod.custSuptMaven.site.AuthenticationFilter;
+import com.prod.custSuptMaven.site.LoggingFilter;
+import com.prod.custSuptMaven.site.SessionListener;
+//import com.prod.custSuptMaven.config.RootContextConfiguration;
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -16,11 +15,11 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 
-import com.prod.custSuptMaven.site.AuthenticationFilter;
-import com.prod.custSuptMaven.site.LoggingFilter;
-import com.prod.custSuptMaven.site.SessionListener;
-import com.prod.custSuptMaven.config.RootContextConfiguration;
-
+import javax.servlet.FilterRegistration;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 
 @SuppressWarnings("unused")
 public class Bootstrap implements WebApplicationInitializer {
@@ -64,15 +63,15 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.addMapping("/services/Rest/*");
         
         //SOAP services (xml)- in addition to REST(json).  
-//        AnnotationConfigWebApplicationContext soapContext =
-//                new AnnotationConfigWebApplicationContext();
-//        soapContext.register(SoapServletContextConfiguration.class);
-//        MessageDispatcherServlet soapServlet =
-//                new MessageDispatcherServlet(soapContext);
-//        soapServlet.setTransformWsdlLocations(true);
-//        dispatcher = container.addServlet("springSoapDispatcher", soapServlet);
-//        dispatcher.setLoadOnStartup(3);
-//        dispatcher.addMapping("/services/Soap/*");
+        AnnotationConfigWebApplicationContext soapContext =
+                new AnnotationConfigWebApplicationContext();
+        soapContext.register(SoapServletContextConfiguration.class);
+        MessageDispatcherServlet soapServlet =
+                new MessageDispatcherServlet(soapContext);
+        soapServlet.setTransformWsdlLocations(true);
+        dispatcher = container.addServlet("springSoapDispatcher", soapServlet);
+        dispatcher.setLoadOnStartup(3);
+        dispatcher.addMapping("/services/Soap/*");
         
         
         // following code blocks replaced customer-support-v8 Configurator class.  see chap 13,pg384.

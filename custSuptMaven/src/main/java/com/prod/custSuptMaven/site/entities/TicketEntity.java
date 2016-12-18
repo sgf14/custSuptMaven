@@ -1,5 +1,7 @@
 package com.prod.custSuptMaven.site.entities;
-/* class notes- see AttachmentEntity class notes.  this entity ties java code to the equivalent MySQL table via implementation
+/* class notes- see AttachmentEntity class notes except that this acts as a DTO due since you cant persist entities w/ instant() properties.
+ * see chap 21 pg 624. note difference in naming from attachment and UserPrincipal w/ entity at the end
+ * .  this entity ties java code to the equivalent MySQL table via implementation
  * in DefaultTicketRepository (which in turn extends BaseRepo and HBaseJpaRepo respectively)
  *  this class is a modified POJO that allows JPA to be implemented in order to be able to save data to tables- see getters and setters below.
  *  Hibernate Validation from chap 16 also used- see annotations below
