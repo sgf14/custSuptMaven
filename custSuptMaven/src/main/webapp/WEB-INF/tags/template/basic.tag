@@ -6,6 +6,11 @@
 <%@ attribute name="extraHeadContent" fragment="true" required="false" %>
 <%@ attribute name="extraNavigationContent" fragment="true" required="false" %>
 <%@ include file="/WEB-INF/jsp/base.jspf" %>
+
+<%--     Note: below in book version changed to i18n <spring:message> format- left these as is for comparison
+     the only i18n .properties file in place for now are english ..._en_US... also note cant have comments inside template tag
+     or at least I havent figured out how to do that, tried both html and jsp comment tagset--%>
+
 <template:main htmlTitle="${htmlTitle}" bodyTitle="${bodyTitle}">
     <jsp:attribute name="headContent">
         <jsp:invoke fragment="extraHeadContent" />

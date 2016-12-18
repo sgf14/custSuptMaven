@@ -62,16 +62,16 @@ public class Bootstrap implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(2);
         dispatcher.addMapping("/services/Rest/*");
         
-        //SOAP services (xml)- in addition to REST(json).  
-        AnnotationConfigWebApplicationContext soapContext =
-                new AnnotationConfigWebApplicationContext();
-        soapContext.register(SoapServletContextConfiguration.class);
-        MessageDispatcherServlet soapServlet =
-                new MessageDispatcherServlet(soapContext);
-        soapServlet.setTransformWsdlLocations(true);
-        dispatcher = container.addServlet("springSoapDispatcher", soapServlet);
-        dispatcher.setLoadOnStartup(3);
-        dispatcher.addMapping("/services/Soap/*");
+        //SOAP services (xml)- in addition to REST(json).  disabled for now- need /resources/soapServletContext.xml file in addition to coinfig
+//        AnnotationConfigWebApplicationContext soapContext =
+//                new AnnotationConfigWebApplicationContext();
+//        soapContext.register(SoapServletContextConfiguration.class);
+//        MessageDispatcherServlet soapServlet =
+//                new MessageDispatcherServlet(soapContext);
+//        soapServlet.setTransformWsdlLocations(true);
+//        dispatcher = container.addServlet("springSoapDispatcher", soapServlet);
+//        dispatcher.setLoadOnStartup(3);
+//        dispatcher.addMapping("/services/Soap/*");
         
         
         // following code blocks replaced customer-support-v8 Configurator class.  see chap 13,pg384.
