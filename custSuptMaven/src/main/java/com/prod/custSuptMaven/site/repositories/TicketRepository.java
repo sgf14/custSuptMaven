@@ -9,7 +9,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.prod.custSuptMaven.site.entities.TicketEntity;
 
-public interface TicketRepository extends CrudRepository<TicketEntity, Long>
+public interface TicketRepository extends CrudRepository<TicketEntity, Long>,
+	SearchableRepository<TicketEntity>
 {
     
 }

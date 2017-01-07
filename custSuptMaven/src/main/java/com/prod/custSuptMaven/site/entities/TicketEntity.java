@@ -9,17 +9,27 @@ package com.prod.custSuptMaven.site.entities;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
+import javax.persistence.EntityResult;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 //the entity annotation is established in RootContextConfig class- and used here for the Ticket table specific details
 @Entity
 @Table(name = "Ticket")
+//this annotation needed for full text search functions- chap 23, pg 679
+@SqlResultSetMapping(
+		name = "searchResultMapping.ticket",
+		entities = { @EntityResult(entityClass = TicketEntity.class) },
+		columns = { @ColumnResult(name = "_ft_scoreColumn", type = Double.class)}
+		)
 public class TicketEntity implements Serializable
 {
     private static final long serialVersionUID = 1L;
