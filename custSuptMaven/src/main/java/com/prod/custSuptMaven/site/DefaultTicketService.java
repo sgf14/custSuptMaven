@@ -1,20 +1,22 @@
 package com.prod.custSuptMaven.site;
 /*class notes: chap 14, pg 393.  significant modifications in Persistence chap 21, pg 630
- * Below (spring) MVC model, the C is subdivided to CSR on the server side. the ..Service classes contain the business
- * logic handed to the controller and Services get their data from the R- Repository layer.
- * the Default implementation extends the ..Service class Interface.  the base service instantiates the methods- and any commonly used
+ * Below (spring) MVC model, the C is subdivided to CSR on the server side. the ..Service classes contains the business logic 
+ * handed to the controller and Services get their data from the R- Repository layer.
+ * the Default implementation extends the ..Service class Interface.  the base service interface instantiates the methods- and any commonly used
  * business rules and the DefaultxxService implements those in the default case.  If non-default cases are needed a new class can be created
- * and extends the same interface in order to make the app more easily extendable.
+ * and extends the same interface in order to make the app more easily extendible.
  * 
  * the Persistence changes use the @Inject annotations to access the respective Repositories
  * 
  * Significant changes to this service class in chap 22 to take advantage of springDataJpa- as described in pg 632/656
+ * 
+ * chap 23- added new search method for fulltext search function
  */
 import com.prod.custSuptMaven.site.entities.Attachment;
 import com.prod.custSuptMaven.site.entities.TicketEntity;
 import com.prod.custSuptMaven.site.entities.TicketCommentEntity;
-import com.prod.custSuptMaven.site.entities.UserPrincipal;
 import com.prod.custSuptMaven.site.repositories.AttachmentRepository;
+import com.prod.custSuptMaven.site.repositories.SearchResult;
 import com.prod.custSuptMaven.site.repositories.TicketCommentRepository;
 import com.prod.custSuptMaven.site.repositories.TicketRepository;
 import com.prod.custSuptMaven.site.repositories.UserRepository;
@@ -47,6 +49,21 @@ public class DefaultTicketService implements TicketService
     	List<Ticket> list = new ArrayList<>();
         this.ticketRepository.findAll().forEach(e -> list.add(this.convert(e)));
         return list;
+    }
+    
+    @Override
+    @Transactional
+    public Page<SearchResult<Ticket>> search(String query,
+    										boolean useBooleanMode,
+    										Pageable pageable) {
+    	List<SearchResult<Ticket>> list = new ArrayList<>();
+    	Page<SearchResult<TicketEntity>> entities =
+    			this.ticketRepository.search(query, useBooleanMode, pageable);
+    	entities.forEach(r -> list.add(
+    			new SearchResult<>(this.convert(r.getEntity()), r.getRelevance())
+    	));
+    	
+    	return new PageImpl<>(list, pageable, entities.getTotalElements());
     }
 
     @Override

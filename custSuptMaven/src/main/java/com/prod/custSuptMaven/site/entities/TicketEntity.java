@@ -24,7 +24,8 @@ import java.sql.Timestamp;
 //the entity annotation is established in RootContextConfig class- and used here for the Ticket table specific details
 @Entity
 @Table(name = "Ticket")
-//this annotation needed for full text search functions- chap 23, pg 679
+//this annotation needed for full text search functions- chap 23, pg 679-80. FT search requires a relevance column that does
+// not have getters or setters, but exists as index in db table- and in this app val returned and sent to UI for display.
 @SqlResultSetMapping(
 		name = "searchResultMapping.ticket",
 		entities = { @EntityResult(entityClass = TicketEntity.class) },

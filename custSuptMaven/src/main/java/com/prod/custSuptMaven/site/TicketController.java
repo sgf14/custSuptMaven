@@ -1,7 +1,7 @@
 package com.prod.custSuptMaven.site;
 /* Class Notes- in-memory ticket db in -v9 got moved out to its own Repository class.  such that this only has Controller (old Servlet)
- * functions
- * 
+ * functions. first introduced in chap 14 as the 'C' part of MVC-CSR model.  C in MVC further sudvided into CSR as described in chap 14
+ * Controller will pass CSR data to V (view) jsp.  Model being reserved for Database/Repository info.
  */
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,6 +45,30 @@ public class TicketController
         model.put("tickets", this.ticketService.getAllTickets());
 
         return "ticket/list";
+    }
+    
+    @RequestMapping(value = "search")
+    public String search(Map<String, Object> model) {
+    	model.put("searchPerformed", false);
+    	model.put("searchForm", new SearchForm());
+    	
+    	return "ticket/search";
+    }
+    
+    @RequestMapping(value = "search", params = "query")
+    public String search(Map<String, Object> model, @Valid SearchForm form,
+    					Errors errors, Pageable pageable){
+    	if(errors.hasErrors())
+    		model.put("searchPerformed", false);
+    	else {
+    		model.put("searchPerformed", true);
+    		model.put("results", this.ticketService.search(
+    				form.getQuery(), form.isUseBooleanMode(), pageable
+    		));
+    	}
+    	
+    	return "ticket/search";
+    	
     }
 
     @RequestMapping(value = "view/{ticketId}", method = RequestMethod.GET)
@@ -229,5 +253,25 @@ public class TicketController
         {
             this.body = body;
         }
+    }
+    
+    //created search form and supporting methods as part of chap 23 fulltext search function and assoc search.jsp
+    public static class SearchForm {
+    	@NotBlank(message = "{validate.ticket.search.query}")
+    	private String query;
+    	private boolean useBooleanMode;
+    	
+    	public String getQuery() {
+    		return query;
+    	}
+    	public void setQuery(String query) {
+    		this.query = query;
+    	}
+    	public boolean isUseBooleanMode() {
+    		return useBooleanMode;
+    	}
+    	public void setUseBooleanMode(boolean useBooleanMode) {
+    		this.useBooleanMode = useBooleanMode;
+    	}
     }
 }
