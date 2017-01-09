@@ -35,7 +35,7 @@ public class TicketRepositoryImpl implements SearchableRepository<TicketEntity> 
 		long total = ((Number)this.entityManager.createNativeQuery(
 				"SELECT COUNT(DISTINCT t.TicketId) FROM Ticket t " +
 						"LEFT OUTER JOIN TicketComment c ON c.TicketId = "+
-						"t.TicketId WHERE " + matchTicket + " OR " + " + matchComment"
+						"t.TicketId WHERE " + matchTicket + " OR " + matchComment
 		).setParameter(1, query).getSingleResult()).longValue();
 		
 		//list the results in pageable format

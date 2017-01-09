@@ -18,6 +18,7 @@
     
 	<jsp:attribute name="navigationContent">
         <a href="<c:url value="/ticket/list" />">List Tickets</a><br />
+        <a href="<c:url value="/ticket/search" />"><spring:message code="nav.item.search.tickets" /></a><br>
         <a href="<c:url value="/ticket/create" />">Create a Ticket</a><br />
         <a href="javascript:void 0;"
            onclick="newChat();">Chat with Support</a><br />
