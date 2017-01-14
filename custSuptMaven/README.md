@@ -1,9 +1,11 @@
 Purpose: This Maven project created from scratch in Eclipse to build JWA book 'customer-support' app as it progresses through chapters, starting with chapter 3. Using Git and Github for version control.
 
 TODO:
-reading chap 22. Spring Data JPA
+reading chap 24. db- advanced mappings
 
 Notes/History:
+01/14/17: added and tested chap 23 search functions.  used with MySql FULLTEXT searches via indexes.  both java and db changes as describeed in customer-support-v17 and chap 23 notes
+12/13: corrected and tested Spring data jap i18n messages.
 12/10:mostly finished Spring Data JPA- still need to fix UI messages for jsps (i18n folder).  Ran into a statup problem w/ a contextLoader listener failure
   short answer need to ensure in config package(s) paths- and rootContextConfiguration class specifically that you have all the right paths.  upon edits/adaptation
   I didnt check the path closely enough and had ..custMavenSupt.repositories instead of the correct ..custSuptMaven.site.repositories and app was throwing

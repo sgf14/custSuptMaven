@@ -27,6 +27,20 @@ public class TicketRepositoryImpl implements SearchableRepository<TicketEntity> 
 												Pageable pageable) {
 		//vars for use in methods- custom SQL script via TicketEntity SqlResultSetMapping annotation
 		//note use of compact if/then/else since there are only two choices
+		/* MySql boolean mode.  in FULLTEXT search multi element text string entry here are some of the common functions:
+		 * 1) + = AND 
+		 * 2) - = NOT 
+		 * 3) [no symbol] = implied OR
+		 * 4) * = wildcard. at end of text.  in manuals may be referred to as Truncation character
+		 * 5) it inlcude STOPWORDS function.  see Mysql manual (google search on 'mysql in boolean mode')
+		 * 
+		 * there is a UI checkbox for this.  it really isnt described in JWA book, above is based on web search.
+		 * note there isnt a description of wildcard characters, and entry of partial text strings
+		 * dont return any results.  if has to be the full word separated by space characters
+		 * this is not the way a typical google search works, where partial strings do produce results
+		 * a little more research needed on this.  it may be that FULLTEXT searches in MySQL dont really
+		 * work this way, that it is intended to bring back matching full words.
+		 */
 		String mode = useBooleanMode ? "IN BOOLEAN MODE" : "IN NATURAL LANGUAGE MODE";
 		String matchTicket = "MATCH(t.subject, t.body) AGAINST(?1 " + mode + ")";
 		String matchComment = "MATCH(c.body) AGAINST(?1 " + mode + ")";
