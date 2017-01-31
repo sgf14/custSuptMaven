@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <configuration status="WARN">
     <appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout
-                    pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+                    pattern="%d{MM-dd-yyyy HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
 <!--         see pg 315- had to change this from book default path of ../logs/support.log -->
 <!-- but this version does create a log file and works -->
@@ -12,7 +13,7 @@
             <PatternLayout>
 <!--             see apache log man website for field definitions.  book marked, but also on page 315. -->
 <!-- X{} is also called a fish tag- pg 316 for assoc java class.  Gets user specific detail (amongst others) as enabled in LoggingFilter.java -->
-                <pattern>%d{HH:mm:ss.SSS} [%t] %X{id} %X{username} %-5level %c{36} %l: %msg%n</pattern>
+                <pattern>%d{MM-dd-YYYY HH:mm:ss.SSS} [%t] %X{id} %X{username} %-5level %c{36} %l: %msg%n</pattern>
             </PatternLayout>
             <Policies>
                 <SizeBasedTriggeringPolicy size="10 MB" />
@@ -23,14 +24,13 @@
     <loggers>
         <root level="warn">
             <appender-ref ref="Console" />
+            <appender-ref ref="WroxFileAppender" />
         </root>
 <!--         make sure class path for project is correct when using this as template. Otherwise messages dont get logged -->
-        <logger name="com.prod.custSuptMaven" level="info">
-            <appender-ref ref="WroxFileAppender" />
-        </logger>
-        <logger name="org.apache" level="info">
-            <appender-ref ref="WroxFileAppender" />
-        </logger>
+        <logger name="com.prod.custSuptMaven" level="info" />
+<!--         can comment these out if you want less logging info -->
+        <logger name="org.apache" level="info"/>
+        <logger name="org.springframework" level="info" />
     </loggers>
 </configuration>
 

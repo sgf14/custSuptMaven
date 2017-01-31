@@ -32,7 +32,7 @@ public class DefaultAuthenticationService implements AuthenticationService
             throw new IllegalStateException(e);
         }
     }
-//injecting this is causing a problem
+
     @Inject UserRepository userRepository;
 
     @Override
@@ -55,7 +55,7 @@ public class DefaultAuthenticationService implements AuthenticationService
             return null;
         }
 
-        log.debug("User {} successfully authenticated.", username);
+        log.info("User {} successfully authenticated.", username);
 
         return principal;
     }

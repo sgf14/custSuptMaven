@@ -39,15 +39,24 @@ public class AuthenticationController
     private static final Logger log = LogManager.getLogger();
 
     @Inject AuthenticationService authenticationService;
-    /*Spring request mapping annotation- pg 356 intro.  within the class annot will typically 
+    /*Spring request mapping annotation- pg 356 intro.  within the class annotation will typically 
     correspond to a method- as in this case- will map to a URL portion via ViewResolver in config package 
     when url is called this method is then executed.
     */ 
     @RequestMapping("logout")
     public View logout(HttpServletRequest request, HttpSession session)
     {
-        if(log.isDebugEnabled() && request.getUserPrincipal() != null)
+        //note this log version is only active in debug mode.  note only one item in if() so no brackets
+    	if(log.isDebugEnabled() && request.getUserPrincipal() != null)
             log.debug("User {} logged out.", request.getUserPrincipal().getName());
+    	/* here is the log file non-debug version.
+    	 * note however that because getUserPrincipal is null this never called
+    	 * if you dont have the if() check you get a error page on logout button select.
+    	 * need some work here if you actually want to display the logout message in the log file
+    	 */
+    	if(request.getUserPrincipal() != null)
+    		log.info("User {} logged out.", request.getUserPrincipal().getName());
+    	
         session.invalidate();
         //redirect to proper jsp view
         return new RedirectView("/login", true, false);
@@ -69,9 +78,11 @@ public class AuthenticationController
     public ModelAndView login(Map<String, Object> model, HttpSession session,
                               HttpServletRequest request, @Valid LoginForm form, Errors errors)
     {
-        if(UserPrincipal.getPrincipal(session) != null)
+        if(UserPrincipal.getPrincipal(session) != null) {
+        	// see default auth service for example of log.info version (Service classes have business logic in MCV-CSR model)
+        	// controllers just handle sending to UI (in web page app versions)
             return this.getTicketRedirect();
-
+        }
         if(errors.hasErrors())
         {
             form.setPassword(null);
