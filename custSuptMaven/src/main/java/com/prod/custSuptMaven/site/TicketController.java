@@ -17,6 +17,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.prod.custSuptMaven.config.annotation.WebController;
 import com.prod.custSuptMaven.site.entities.Attachment;
+import com.prod.custSuptMaven.site.entities.Ticket;
+import com.prod.custSuptMaven.site.entities.TicketComment;
 import com.prod.custSuptMaven.site.validation.NotBlank;
 
 import javax.inject.Inject;

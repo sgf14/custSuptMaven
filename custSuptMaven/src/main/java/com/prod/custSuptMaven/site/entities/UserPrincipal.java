@@ -10,6 +10,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.security.Principal;
 
@@ -17,6 +24,12 @@ import java.security.Principal;
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "UserPrincipal_Username", columnNames = "Username")
 })
+@XmlAccessorType(XmlAccessType.NONE)
+@JsonAutoDetect(creatorVisibility = JsonAutoDetect.Visibility.NONE,
+        fieldVisibility = JsonAutoDetect.Visibility.NONE,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        isGetterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class UserPrincipal implements Principal, Cloneable, Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -32,6 +45,8 @@ public class UserPrincipal implements Principal, Cloneable, Serializable
     @Id
     @Column(name = "UserId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement
+    @JsonProperty
     public long getId()
     {
         return this.id;
@@ -50,6 +65,8 @@ public class UserPrincipal implements Principal, Cloneable, Serializable
     }
 
     @Basic
+    @XmlElement
+    @JsonProperty
     public String getUsername()
     {
         return this.username;

@@ -53,7 +53,7 @@ import com.prod.custSuptMaven.site.converters.InstantConverter;
 //not have getters or setters, but exists as index in db table- and in this app val returned and sent to UI for display.
 @SqlResultSetMapping(
 		name = "searchResultMapping.ticket",
-		entities = { @EntityResult(entityClass = TicketEntity.class) },
+		entities = { @EntityResult(entityClass = Ticket.class) },
 		columns = { @ColumnResult(name = "_ft_scoreColumn", type = Double.class)}
 		)
 //introduced in chap 21 spring-data, pg 624 with some addt detail pgs 647-650,  still dont have a firm grasp on its function
@@ -101,7 +101,8 @@ public class Ticket implements Serializable {
     {
         this.id = id;
     }
-
+    
+    //see chap24 pg 720 for changed usage of UserPrincipal
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "UserId")
     @XmlElement
@@ -157,7 +158,7 @@ public class Ticket implements Serializable {
         this.dateCreated = dateCreated;
     }
     
-    //this block and above allows Ticket.java to act like a normal entity even though it is mapping a BLOB, see pg 720
+    //this block and above allows Ticket.java to act like a normal entity even though it is mapping a BLOB, see pg 720 and 722
     // elements somewhat similar to orig site/Ticket.java (the DTO for old TicketEntity class).  note diff
     // between old Map and new ArrayList above.
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,

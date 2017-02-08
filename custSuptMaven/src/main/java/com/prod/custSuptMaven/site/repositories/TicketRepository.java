@@ -7,10 +7,10 @@ package com.prod.custSuptMaven.site.repositories;
  */
 import org.springframework.data.repository.CrudRepository;
 
-import com.prod.custSuptMaven.site.entities.TicketEntity;
+import com.prod.custSuptMaven.site.entities.Ticket;
 
-public interface TicketRepository extends CrudRepository<TicketEntity, Long>,
-	SearchableRepository<TicketEntity>
+public interface TicketRepository extends CrudRepository<Ticket, Long>,
+	SearchableRepository<Ticket>
 {
     
 }

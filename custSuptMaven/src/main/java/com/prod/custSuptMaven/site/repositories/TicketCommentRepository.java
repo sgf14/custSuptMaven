@@ -4,10 +4,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
-import com.prod.custSuptMaven.site.entities.TicketCommentEntity;
+import com.prod.custSuptMaven.site.entities.TicketComment;
 
 public interface TicketCommentRepository
-        extends CrudRepository<TicketCommentEntity, Long>
+        extends CrudRepository<TicketComment, Long>
 {
-    Page<TicketCommentEntity> getByTicketId(long ticketId, Pageable p);
+    Page<TicketComment> getByTicketId(long ticketId, Pageable p);
 }

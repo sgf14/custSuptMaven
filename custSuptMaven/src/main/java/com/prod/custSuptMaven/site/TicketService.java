@@ -8,7 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 
-import com.prod.custSuptMaven.site.TicketComment;
+import com.prod.custSuptMaven.site.entities.Ticket;
+import com.prod.custSuptMaven.site.entities.TicketComment;
 import com.prod.custSuptMaven.site.repositories.SearchResult;
 import com.prod.custSuptMaven.site.validation.NotBlank;
 

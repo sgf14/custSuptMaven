@@ -11,5 +11,6 @@ import com.prod.custSuptMaven.site.entities.Attachment;
 
 public interface AttachmentRepository extends CrudRepository<Attachment, Long>
 {
-    Iterable<Attachment> getByTicketId(long ticketId);
+    //iterable removed by chap 24 when attachments broken out to both ticket and ticketComment classes
+	//Iterable<Attachment> getByTicketId(long ticketId);
 }

@@ -1,5 +1,5 @@
 package com.prod.custSuptMaven.site;
-/*class notes: chap 14, pg 393.  significant modifications in Persistence chap 21, pg 630
+/*class notes: chap 14, pg 393.  significant modifications in Persistence chap 21, pg 630.  includes both ticket and newly added ticketComment
  * Below (spring) MVC model, the C is subdivided to CSR on the server side. the ..Service classes contains the business logic 
  * handed to the controller and Services get their data from the R- Repository layer.
  * the Default implementation extends the ..Service class Interface.  the base service interface instantiates the methods- and any commonly used
@@ -11,10 +11,13 @@ package com.prod.custSuptMaven.site;
  * Significant changes to this service class in chap 22 to take advantage of springDataJpa- as described in pg 632/656
  * 
  * chap 23- added new search method for fulltext search function
+ * 
+ * chap 24- with refactoring of attachments significant changes made to this class.  see git hub version changes.  not described in detail
+ * in book itself, since subjects as a whole were already covered. compar book version of customer-support-v17 vs chap 24 xx-v18
  */
 import com.prod.custSuptMaven.site.entities.Attachment;
-import com.prod.custSuptMaven.site.entities.TicketEntity;
-import com.prod.custSuptMaven.site.entities.TicketCommentEntity;
+import com.prod.custSuptMaven.site.entities.Ticket;
+import com.prod.custSuptMaven.site.entities.TicketComment;
 import com.prod.custSuptMaven.site.repositories.AttachmentRepository;
 import com.prod.custSuptMaven.site.repositories.SearchResult;
 import com.prod.custSuptMaven.site.repositories.TicketCommentRepository;
@@ -46,9 +49,10 @@ public class DefaultTicketService implements TicketService
     @Transactional
     public List<Ticket> getAllTickets()
     {
-    	List<Ticket> list = new ArrayList<>();
-        this.ticketRepository.findAll().forEach(e -> list.add(this.convert(e)));
-        return list;
+    	Iterable<Ticket> i = this.ticketRepository.findAll();
+        List<Ticket> l = new ArrayList<>();
+        i.forEach(l::add);
+        return l;
     }
     
     @Override
@@ -56,70 +60,28 @@ public class DefaultTicketService implements TicketService
     public Page<SearchResult<Ticket>> search(String query,
     										boolean useBooleanMode,
     										Pageable pageable) {
-    	List<SearchResult<Ticket>> list = new ArrayList<>();
-    	Page<SearchResult<TicketEntity>> entities =
-    			this.ticketRepository.search(query, useBooleanMode, pageable);
-    	entities.forEach(r -> list.add(
-    			new SearchResult<>(this.convert(r.getEntity()), r.getRelevance())
-    	));
-    	
-    	return new PageImpl<>(list, pageable, entities.getTotalElements());
+    	return this.ticketRepository.search(query, useBooleanMode, pageable);
     }
 
     @Override
     @Transactional
     public Ticket getTicket(long id)
     {
-    	TicketEntity entity = this.ticketRepository.findOne(id);
-        return entity == null ? null : this.convert(entity);
-    }
-    
-  //the convert method was added as part of persistence changes
-    private Ticket convert(TicketEntity entity)
-    {
-        Ticket ticket = new Ticket();
-        ticket.setId(entity.getId());
-        ticket.setCustomerName(
-                this.userRepository.findOne(entity.getUserId()).getUsername()
-        );
-        ticket.setSubject(entity.getSubject());
-        ticket.setBody(entity.getBody());
-        ticket.setDateCreated(Instant.ofEpochMilli(
-                entity.getDateCreated().getTime()
-        ));
-        this.attachmentRepository.getByTicketId(entity.getId())
-                .forEach(ticket::addAttachment);
+    	Ticket ticket = this.ticketRepository.findOne(id);
+        ticket.getNumberOfAttachments();
         return ticket;
     }
-
+    
+  //note the earlier chapter convert method (private method) that was here removed entirely based on chap 24 attachment changes
+    
     @Override
     @Transactional
     public void save(Ticket ticket)
     {
-    	TicketEntity entity = new TicketEntity();
-        entity.setId(ticket.getId());
-        entity.setUserId(this.userRepository.getByUsername(
-                ticket.getCustomerName()
-        ).getId());
-        entity.setSubject(ticket.getSubject());
-        entity.setBody(ticket.getBody());
-
-        if(ticket.getId() < 1)
-        {
+    	if(ticket.getId() < 1)
             ticket.setDateCreated(Instant.now());
-            entity.setDateCreated(new Timestamp(
-                    ticket.getDateCreated().toEpochMilli()
-            ));
-            this.ticketRepository.save(entity);
-            ticket.setId(entity.getId());
-            for(Attachment attachment : ticket.getAttachments())
-            {
-                attachment.setTicketId(entity.getId());
-                this.attachmentRepository.save(attachment);
-            }
-        }
-        else
-            this.ticketRepository.save(entity);
+
+        this.ticketRepository.save(ticket);
     }
     
     //the delete method was added in Persistence changes- note that TicketService interface needed to add this new method as well
@@ -130,56 +92,27 @@ public class DefaultTicketService implements TicketService
     	this.ticketRepository.delete(id);
     }
     
+    //ticketComment blocks
     @Override
     @Transactional
-    public Page<TicketComment> getComments(long ticketId, Pageable page)
+    public Page<TicketComment> getComments(long ticketId, Pageable pageable)
     {
-        List<TicketComment> comments = new ArrayList<>();
-        Page<TicketCommentEntity> entities =
-                this.commentRepository.getByTicketId(ticketId, page);
-        entities.forEach(e -> comments.add(this.convert(e)));
-
-        return new PageImpl<>(comments, page, entities.getTotalElements());
+    	return this.commentRepository.getByTicketId(ticketId, pageable);
     }
 
-    private TicketComment convert(TicketCommentEntity entity)
-    {
-        TicketComment comment = new TicketComment();
-        comment.setId(entity.getId());
-        comment.setCustomerName(
-                this.userRepository.findOne(entity.getUserId()).getUsername()
-        );
-        comment.setBody(entity.getBody());
-        comment.setDateCreated(Instant.ofEpochMilli(
-                entity.getDateCreated().getTime()
-        ));
-
-        return comment;
-    }
-
+    //as with above private convert method that was here removed entirely based on chap 24 (-v18)changes
+    
     @Override
     @Transactional
     public void save(TicketComment comment, long ticketId)
     {
-        TicketCommentEntity entity = new TicketCommentEntity();
-        entity.setId(comment.getId());
-        entity.setTicketId(ticketId);
-        entity.setUserId(this.userRepository.getByUsername(
-                comment.getCustomerName()
-        ).getId());
-        entity.setBody(comment.getBody());
-
-        if(comment.getId() < 1)
+    	if(comment.getId() < 1)
         {
+            comment.setTicketId(ticketId);
             comment.setDateCreated(Instant.now());
-            entity.setDateCreated(new Timestamp(
-                    comment.getDateCreated().toEpochMilli()
-            ));
-            this.commentRepository.save(entity);
-            comment.setId(entity.getId());
         }
-        else
-            this.commentRepository.save(entity);
+
+        this.commentRepository.save(comment);
     }
 
     @Override
@@ -187,6 +120,16 @@ public class DefaultTicketService implements TicketService
     public void deleteComment(long id)
     {
         this.commentRepository.delete(id);
+    }
+    
+    @Override
+    @Transactional
+    public Attachment getAttachment(long id)
+    {
+        Attachment attachment = this.attachmentRepository.findOne(id);
+        if(attachment != null)
+            attachment.getContents();
+        return attachment;
     }
     
  }    
