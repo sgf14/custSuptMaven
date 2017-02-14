@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 
+import com.prod.custSuptMaven.site.entities.Attachment;
 import com.prod.custSuptMaven.site.entities.Ticket;
 import com.prod.custSuptMaven.site.entities.TicketComment;
 import com.prod.custSuptMaven.site.repositories.SearchResult;
@@ -58,5 +59,8 @@ public interface TicketService
                 long ticketId
     );
     void deleteComment(long id);
+    
+    //added by chap 24 after attachment re factored into sepr tables
+    Attachment getAttachment(long id);
 }
 

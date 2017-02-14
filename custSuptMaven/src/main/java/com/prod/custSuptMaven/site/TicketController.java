@@ -19,6 +19,7 @@ import com.prod.custSuptMaven.config.annotation.WebController;
 import com.prod.custSuptMaven.site.entities.Attachment;
 import com.prod.custSuptMaven.site.entities.Ticket;
 import com.prod.custSuptMaven.site.entities.TicketComment;
+import com.prod.custSuptMaven.site.entities.UserPrincipal;
 import com.prod.custSuptMaven.site.validation.NotBlank;
 
 import javax.inject.Inject;
@@ -88,20 +89,15 @@ public class TicketController
     }
 
     @RequestMapping(
-            value = "/{ticketId}/attachment/{attachment:.+}",
+            value = "attachment/{attachmentId}",
             method = RequestMethod.GET
     )
-    public View download(@PathVariable("ticketId") long ticketId,
-                         @PathVariable("attachment") String name)
+    public View download(@PathVariable("attachmentId") long attachmentId)
     {
-        Ticket ticket = this.ticketService.getTicket(ticketId);
-        if(ticket == null)
-            return this.getListRedirectView();
-
-        Attachment attachment = ticket.getAttachment(name);
+        Attachment attachment = this.ticketService.getAttachment(attachmentId);
         if(attachment == null)
         {
-            log.info("Requested attachment {} not found on ticket {}.", name, ticket);
+            log.info("Requested attachment {} not found.", attachmentId);
             return this.getListRedirectView();
         }
 
@@ -121,13 +117,15 @@ public class TicketController
      * compare to TicketServlet class/ createTicket method.  Spring makes this simpler.
      */
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public ModelAndView create(Principal principal, @Valid TicketForm form, Errors errors, Map<String, Object> model) throws IOException
+    public ModelAndView create(Principal principal, @Valid TicketForm form, 
+    						Errors errors, Map<String, Object> model) 
+    	throws IOException
     {
         if(errors.hasErrors())
         	return new ModelAndView("ticket/add");
         
     	Ticket ticket = new Ticket();
-        ticket.setCustomerName(principal.getName());
+    	ticket.setCustomer((UserPrincipal)principal);
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
         
@@ -163,6 +161,7 @@ public class TicketController
                                 Errors errors, Map<String, Object> model,
                                 Pageable page,
                                 @PathVariable("ticketId") long ticketId)
+                   throws IOException                      
     {
         Ticket ticket = this.ticketService.getTicket(ticketId);
         if(ticket == null)
@@ -172,8 +171,21 @@ public class TicketController
             return this.view(model, page, ticketId);
 
         TicketComment comment = new TicketComment();
-        comment.setCustomerName(principal.getName());
+        comment.setCustomer((UserPrincipal)principal);
         comment.setBody(form.getBody());
+        
+        //added in chap 24 for ability to add attcmt to comments
+        for(MultipartFile filePart : form.getAttachments())
+        {
+            log.debug("Processing attachment for new comment.");
+            Attachment attachment = new Attachment();
+            attachment.setName(filePart.getOriginalFilename());
+            attachment.setMimeContentType(filePart.getContentType());
+            attachment.setContents(filePart.getBytes());
+            if((attachment.getName() != null && attachment.getName().length() > 0) ||
+                    (attachment.getContents() != null && attachment.getContents().length > 0))
+                comment.addAttachment(attachment);
+        }
 
         try
         {
@@ -200,7 +212,7 @@ public class TicketController
         return new RedirectView("/ticket/list", true, false);
     }
     
-    //spring form class-used above- utilizing MultipartFile for file attachment vs. Ticket.java class in -v9
+    //spring form class-called/used above in get and post- utilizing MultipartFile for file attachment vs. Ticket.java class in -v9
     public static class TicketForm
     {
     	@NotBlank(message = "{validate.ticket.subject}")
@@ -245,6 +257,9 @@ public class TicketController
     {
         @NotBlank(message = "{validate.ticket.comment.body}")
         private String body;
+        //attachments added in chap 24
+        @NotNull(message = "{validate.ticket.comment.attachments}")
+        private List<MultipartFile> attachments;
 
         public String getBody()
         {
@@ -254,6 +269,17 @@ public class TicketController
         public void setBody(String body)
         {
             this.body = body;
+        }
+        
+        //added by chap 24- atmts on ticket comments
+        public List<MultipartFile> getAttachments()
+        {
+            return attachments;
+        }
+
+        public void setAttachments(List<MultipartFile> attachments)
+        {
+            this.attachments = attachments;
         }
     }
     
