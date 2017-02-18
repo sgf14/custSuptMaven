@@ -1,6 +1,6 @@
 <%--@elvariable id="searchForm" type="com.prod.custSuptMaven.site.TicketController.SearchForm" --%>
 <%--@elvariable id="searchPerformed" type="boolean" --%>
-<%--@elvariable id="results" type="org.springframework.data.domain.Page<com.prod.custSuptMaven.site.repositories.SearchResult<com.prod.custSuptMaven.site.Ticket>>" --%>
+<%--@elvariable id="results" type="org.springframework.data.domain.Page<com.prod.custSuptMaven.site.repositories.SearchResult<com.prod.custSuptMaven.site.entities.Ticket>>" --%>
 <spring:message code="title.searchTickets" var="searchTitle" />
 <template:basic htmlTitle="${searchTitle}" bodyTitle="${searchTitle}">
 	<form:form method="get" modelAttribute="searchForm">
@@ -40,7 +40,7 @@
 						<c:out value="${wrox:abbreviateString(result.entity.subject, 60)}" />
 					</a><br>
 					<spring:message code="message.ticketSearch.relevance" />: ${result.relevance}<br> 
-					<c:out value="${result.entity.customerName}" />&nbsp;
+					<c:out value="${result.entity.customer.username}" />&nbsp;
 					<spring:message code="message.ticketList.created" />&nbsp;
 					<wrox:formatDate value="${result.entity.dateCreated}" type="both"
 							timeStyle="short" dateStyle="medium" /><br>

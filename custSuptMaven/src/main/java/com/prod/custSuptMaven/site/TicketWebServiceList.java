@@ -1,5 +1,6 @@
 package com.prod.custSuptMaven.site;
 
+import com.prod.custSuptMaven.site.entities.Ticket;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;

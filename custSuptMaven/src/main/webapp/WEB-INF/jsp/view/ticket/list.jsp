@@ -1,4 +1,4 @@
-<%--@elvariable id="tickets" type="java.util.List<com.prod.custSuptMaven.site.Ticket>"--%>
+<%--@elvariable id="tickets" type="java.util.List<com.prod.custSuptMaven.site.entities.Ticket>"--%>
 <spring:message code="title.ticketList" var="listTitle" />
 <template:basic htmlTitle="${listTitle}" bodyTitle="${listTitle}">
     <c:choose>
@@ -11,7 +11,7 @@
                 <a href="<c:url value="/ticket/view/${ticket.id}" />">
                 <c:out value="${wrox:abbreviateString(ticket.subject, 60)}"/>
                 </a><br />
-                <c:out value="${ticket.customerName}" />&nbsp;
+                <c:out value="${ticket.customer.username}" />&nbsp;
                 <spring:message code="message.ticketList.created" />&nbsp;
                 <wrox:formatDate value="${ticket.dateCreated}" type="both"
                                  timeStyle="short" dateStyle="medium" /><br />

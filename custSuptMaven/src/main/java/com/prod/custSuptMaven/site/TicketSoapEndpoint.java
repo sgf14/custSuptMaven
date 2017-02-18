@@ -3,6 +3,7 @@ package com.prod.custSuptMaven.site;
  * 
  */
 import com.prod.custSuptMaven.site.entities.Attachment;
+import com.prod.custSuptMaven.site.entities.Ticket;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.Namespace;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -44,7 +45,7 @@ public class TicketSoapEndpoint
     public Ticket create(@RequestPayload CreateTicket form)
     {
         Ticket ticket = new Ticket();
-        ticket.setCustomerName("WebServiceAnonymous");
+        ticket.setCustomer(null); // TODO: How do you secure SOAP? changed in chap 24 w/ user principal changes- REST and SOAP
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
         if(form.getAttachments() != null)

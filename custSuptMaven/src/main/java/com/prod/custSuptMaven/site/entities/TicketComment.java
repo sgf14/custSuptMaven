@@ -43,7 +43,7 @@ import com.prod.custSuptMaven.site.entities.Attachment;
 import com.prod.custSuptMaven.site.entities.UserPrincipal;
 import com.prod.custSuptMaven.site.validation.NotBlank;
 
-//see ..entities/Ticketfor details on annotations
+//see ..entities/Ticket for details on annotations
 @Entity
 @Table(name = "TicketComment")
 @XmlRootElement(namespace = "http://example.com/xmlns/support", name = "comment")
@@ -65,7 +65,7 @@ public class TicketComment implements Serializable {
     @NotBlank(message = "{validate.ticket.comment.body}")
     private String body;
     
-    //noe use of Instant here and below- part of chap 24 changes
+    //note use of Instant here and below- part of chap 24 changes
     private Instant dateCreated;
     
     //note use of ArrayList- part of chap 24 changes- in addition to the new ability to add attachments to both

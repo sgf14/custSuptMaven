@@ -5,6 +5,7 @@ package com.prod.custSuptMaven.site;
 import com.prod.custSuptMaven.config.annotation.RestEndpoint;
 import com.prod.custSuptMaven.exception.ResourceNotFoundException;
 import com.prod.custSuptMaven.site.entities.Attachment;
+import com.prod.custSuptMaven.site.entities.Ticket;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +69,7 @@ public class TicketRestEndpoint
     public ResponseEntity<Ticket> create(@RequestBody TicketForm form)
     {
         Ticket ticket = new Ticket();
-        ticket.setCustomerName("WebServiceAnonymous");
+        ticket.setCustomer(null); // TODO: How do you secure REST?  changed in chap 24 w/ user principal changes- REST and SOAP
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
         ticket.setAttachments(form.getAttachments());

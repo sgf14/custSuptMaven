@@ -15,14 +15,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.prod.custSuptMaven.site.entities.TicketEntity;
+import com.prod.custSuptMaven.site.entities.Ticket;
 
-public class TicketRepositoryImpl implements SearchableRepository<TicketEntity> {
+public class TicketRepositoryImpl implements SearchableRepository<Ticket> {
 	//using TicketEntity as base for entityManager in this case
 	@PersistenceContext EntityManager entityManager;
 	
 	@Override
-	public Page<SearchResult<TicketEntity>> search(String query, 
+	public Page<SearchResult<Ticket>> search(String query, 
 												boolean useBooleanMode, 
 												Pageable pageable) {
 		//vars for use in methods- custom SQL script via TicketEntity SqlResultSetMapping annotation
@@ -69,9 +69,9 @@ public class TicketRepositoryImpl implements SearchableRepository<TicketEntity> 
 		
 		//Object var results cast to Array list via lambda expression.  see pg 682.  result 1st, relevance 2nd
 		//(zero based array = 0,1)
-		List<SearchResult<TicketEntity>> list = new ArrayList<>();
+		List<SearchResult<Ticket>> list = new ArrayList<>();
 		results.forEach(o -> list.add(
-				new SearchResult<>((TicketEntity)o[0], (Double)o[1])
+				new SearchResult<>((Ticket)o[0], (Double)o[1])
 		));
 		
 		return new PageImpl<>(list, pageable, total);
