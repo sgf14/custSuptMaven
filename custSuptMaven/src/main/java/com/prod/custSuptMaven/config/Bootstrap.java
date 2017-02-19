@@ -7,7 +7,8 @@ package com.prod.custSuptMaven.config;
 import com.prod.custSuptMaven.site.AuthenticationFilter;
 import com.prod.custSuptMaven.site.LoggingFilter;
 import com.prod.custSuptMaven.site.SessionListener;
-//import com.prod.custSuptMaven.config.RootContextConfiguration;
+//for below- as with any class it doesnt need to be explicitly imported if its in a common folder/package, even though it is used
+//import com.prod.custSuptMaven.config.RootContextConfiguration;  
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -23,6 +24,7 @@ import javax.servlet.ServletRegistration;
 
 @SuppressWarnings("unused")
 public class Bootstrap implements WebApplicationInitializer {
+	//as with all Overrides this annotation indicates its method overrides a method within the implemented class
 	@Override
     public void onStartup(ServletContext container) throws ServletException
     {

@@ -44,7 +44,7 @@ public class TicketController
     @RequestMapping(value = {"", "list"}, method = RequestMethod.GET)
     public String list(Map<String, Object> model)
     {
-        log.debug("Listing tickets.");
+        log.info("Listing tickets.");
         model.put("tickets", this.ticketService.getAllTickets());
 
         return "ticket/list";
@@ -59,6 +59,7 @@ public class TicketController
     }
     
     @RequestMapping(value = "search", params = "query")
+    //TODO enhancement- Relevance.  could condition 'relevance' field display to something a little more user friendly
     public String search(Map<String, Object> model, @Valid SearchForm form,
     					Errors errors, Pageable pageable){
     	if(errors.hasErrors())
@@ -85,6 +86,7 @@ public class TicketController
         model.put("ticket", ticket);
         model.put("comments", this.ticketService.getComments(ticketId, page));
         model.put("commentForm", new CommentForm());
+        log.info("Viewing ticket :{}", ticketId);
         return new ModelAndView("ticket/view");
     }
 
@@ -133,7 +135,7 @@ public class TicketController
         //see pg 366 for MultipartFile details for uploading files.  compare to chap 3, utilizing a Servlet (or TicketServlet/processAttachment method)
         for(MultipartFile filePart : form.getAttachments())
         {
-            log.debug("Processing attachment for new ticket.");
+            log.info("Processing attachment for new ticket.");
             Attachment attachment = new Attachment();
             attachment.setName(filePart.getOriginalFilename());
             attachment.setMimeContentType(filePart.getContentType());
@@ -144,10 +146,12 @@ public class TicketController
         }
 
         try {
+        	log.info("Saving new ticket");
         	this.ticketService.save(ticket);
         } catch (ConstraintViolationException e) {
         //redirect to a view after creation
         	model.put("validationErrors", e.getConstraintViolations());
+        	log.info("Erro saving new ticket ", e);
         	return new ModelAndView("ticket/add");
         }
         
@@ -156,6 +160,9 @@ public class TicketController
         		));
     }
     //comments added in chap 22- spring data JPA
+    // 02/19/17- having assoc view.jsp updated properly is critical.  w/o it comments with or without atmts didnt work. took a while to figure out
+    //had small omission in form action (not having enctype for atmt) and
+    //this requestmapping was never called and therefore java logging didnt trigger either.  didnt get firebug form errors either.
     @RequestMapping(value = "comment/{ticketId}", method = RequestMethod.POST)
     public ModelAndView comment(Principal principal, @Valid CommentForm form,
                                 Errors errors, Map<String, Object> model,
@@ -177,7 +184,10 @@ public class TicketController
         //added in chap 24 for ability to add attcmt to comments
         for(MultipartFile filePart : form.getAttachments())
         {
-            log.info("Processing attachment for new ticket comment.");
+            //TODO- enhancement- attachment size error page.  if file is too large app boms out and fails out to jsp html error page.  could make this 
+        	// a little more user freindly and tell them attachment is too large and try again.  in Ticket or TickerComment attach 
+        	// c:\ins.pdf as example 
+        	log.info("Processing attachment for new ticket comment.");
             Attachment attachment = new Attachment();
             attachment.setName(filePart.getOriginalFilename());
             attachment.setMimeContentType(filePart.getContentType());
@@ -189,7 +199,8 @@ public class TicketController
 
         try
         {
-            this.ticketService.save(comment, ticketId);
+            log.info("saving new ticket comment, ticket id {}", ticketId);
+        	this.ticketService.save(comment, ticketId);
         }
         catch(ConstraintViolationException e)
         {

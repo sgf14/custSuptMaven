@@ -44,7 +44,8 @@ import com.prod.custSuptMaven.site.entities.Attachment;
 import com.prod.custSuptMaven.site.entities.UserPrincipal;
 import com.prod.custSuptMaven.site.validation.NotBlank;
 // 02/17/17- 2 problems. 1- ticket comment wont add w or w/o atmt.  2-cant load ticket atmtn- but can add an atmt.  check if out of c drive when attached
-//see ..entities/Ticket for details on annotations
+//see ..entities/Ticket for details on annotations.
+// 02/19/17- finally fixed- had code omission problem in view.jsp file.  see TicketController notes (where logging is)
 @Entity
 @Table(name = "TicketComment")
 @XmlRootElement(namespace = "http://example.com/xmlns/support", name = "comment")

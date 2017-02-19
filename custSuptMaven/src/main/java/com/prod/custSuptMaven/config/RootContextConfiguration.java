@@ -14,9 +14,11 @@ import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.instrument.classloading.LoadTimeWeaver;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -41,19 +43,26 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+import javax.inject.Inject;
 import javax.persistence.SharedCacheMode;
 import javax.persistence.ValidationMode;
 import javax.sql.DataSource;
+
 //see chap 14, pg 395 for good description of this annotation group and its relation to rootContext. affects @Component, @Service
 //and the @Repository, but not @Controller- which is handled by ServletContext
 @Configuration
 //following annotations support websocket/chat function and SQL
 @EnableScheduling
+
+//added by chap 24, pg 723 w/ supporting inject below and jdbc implementation and use of converters
+@EnableLoadTimeWeaving
+
+//following 2 annot. SQL add.  Ensures async takes precedence over SQL transaction so transaction doesnt get partially cutoff- see chap 21 pg 609 
 @EnableAsync(
 		mode = AdviceMode.PROXY, proxyTargetClass = false,
         order = Ordered.HIGHEST_PRECEDENCE
 )
-//SQL add.  Ensures async takes precedence over SQL transaction so transaction doesnt get partially cutoff- see pg 609
+
 @EnableTransactionManagement(
         mode = AdviceMode.PROXY, proxyTargetClass = false,
         order = Ordered.LOWEST_PRECEDENCE
@@ -65,6 +74,7 @@ import javax.sql.DataSource;
 		transactionManagerRef = "jpaTransactionManager"
 )
 
+//chap 12, pg 348- basic spring setup.  sets base application package set to scan
 @ComponentScan(
         basePackages = "com.prod.custSuptMaven.site",
         excludeFilters = @ComponentScan.Filter({Controller.class, ControllerAdvice.class})
@@ -77,7 +87,11 @@ public class RootContextConfiguration
     private static final Logger schedulingLogger =
             LogManager.getLogger(log.getName() + ".[scheduling]");
     
+    //put all injects at top of class. timeWeaver is chap 24 addition- for use below in jdbc setup
+    @Inject LoadTimeWeaver loadTimeWeaver; // TODO: remove when SPR-10856 fixed
+    
     //Internationalization see chap 15. commons methods in this location.  See chap 15, if additions are needed.
+    //these will contain all the UI messages refered to in java code.  only English versions in place now
     @Bean
     public MessageSource messageSource()
     {
@@ -149,6 +163,8 @@ public class RootContextConfiguration
         Map<String, Object> properties = new Hashtable<>();
         properties.put("javax.persistence.schema-generation.database.action",
                 "none");
+        //added by chap 24, pg 724
+        properties.put("hibernate.ejb.use_class_enhancer", "true");
 
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabasePlatform("org.hibernate.dialect.MySQL5InnoDBDialect");
@@ -158,9 +174,13 @@ public class RootContextConfiguration
         factory.setJpaVendorAdapter(adapter);
         factory.setDataSource(this.customerSupportDataSource());
         //set (limit) the package(s) to scan for DB POJO's
-        factory.setPackagesToScan("com.prod.custSuptMaven.site.entities");
+        factory.setPackagesToScan("com.prod.custSuptMaven.site.entities",
+        		//scanned package added by chap 24, pg 699 for instant(timestamp) function
+        		"com.prod.custSuptMaven.site.converters");
         factory.setSharedCacheMode(SharedCacheMode.ENABLE_SELECTIVE);
         factory.setValidationMode(ValidationMode.NONE);
+        //time weaver added by chap 24, pg 723.  see inject above also.  used as support for lazy loading in attachment function. 
+        factory.setLoadTimeWeaver(this.loadTimeWeaver); // TODO: -v18 ver note- remove when SPR-10856 fixed
         factory.setJpaPropertyMap(properties);
         return factory;
     }

@@ -18,7 +18,7 @@ displays need to update the appropriatei18n folder .properties file.  see chap 1
         <c:forEach items="${ticket.attachments}" var="attachment"
                    varStatus="status">
             <c:if test="${!status.first}">, </c:if>
-            <a href="<c:url value="/ticket/${ticketId}/attachment/${attachment.name}" />"><c:out value="${attachment.name}" /></a>
+            <a href="<c:url value="/ticket/attachment/${attachment.id}" />"><c:out value="${attachment.name}" /></a>
         </c:forEach><br /><br />
     </c:if>
     
@@ -58,7 +58,8 @@ displays need to update the appropriatei18n folder .properties file.  see chap 1
     </c:choose>
     <b><spring:message code="message.ticketView.addComment" /></b><br />
     <c:url value="/ticket/comment/${ticketId}" var="formAction" />
-    <form:form action="${formAction}" method="post" modelAttribute="commentForm">
+    <form:form action="${formAction}" method="post" modelAttribute="commentForm"
+    			enctype="multipart/form-data">
         <form:label path="body"><spring:message code="field.ticket.comment.body" /></form:label>
         <form:textarea path="body" rows="5" cols="30" /><br />
         <form:errors path="body" cssClass="errors" /><br />
