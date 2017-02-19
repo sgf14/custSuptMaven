@@ -24,15 +24,15 @@ import com.prod.custSuptMaven.site.repositories.TicketCommentRepository;
 import com.prod.custSuptMaven.site.repositories.TicketRepository;
 import com.prod.custSuptMaven.site.repositories.UserRepository;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,9 @@ import java.util.List;
 @Service
 public class DefaultTicketService implements TicketService
 {
-    @Inject TicketRepository ticketRepository;
+	private static final Logger log = LogManager.getLogger();
+	
+	@Inject TicketRepository ticketRepository;
     @Inject TicketCommentRepository commentRepository;
     @Inject AttachmentRepository attachmentRepository;
     @Inject UserRepository userRepository;
@@ -106,6 +108,7 @@ public class DefaultTicketService implements TicketService
     @Transactional
     public void save(TicketComment comment, long ticketId)
     {
+    	log.info("Entered ticket comment {} save.", ticketId);
     	if(comment.getId() < 1)
         {
             comment.setTicketId(ticketId);

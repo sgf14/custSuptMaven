@@ -177,7 +177,7 @@ public class TicketController
         //added in chap 24 for ability to add attcmt to comments
         for(MultipartFile filePart : form.getAttachments())
         {
-            log.debug("Processing attachment for new comment.");
+            log.info("Processing attachment for new ticket comment.");
             Attachment attachment = new Attachment();
             attachment.setName(filePart.getOriginalFilename());
             attachment.setMimeContentType(filePart.getContentType());
@@ -194,6 +194,7 @@ public class TicketController
         catch(ConstraintViolationException e)
         {
             model.put("validationErrors", e.getConstraintViolations());
+            log.info("Error adding new ticket comment. ", e);
             return this.view(model, page, ticketId);
         }
 

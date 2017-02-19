@@ -1,4 +1,5 @@
 package com.prod.custSuptMaven.site.entities;
+//
 /* class notes- similar to entities/Ticket.Java this was introduced in chap 24 to eliminate need for orig site/TicketComment class
  * DTO function.  very similar changes- replaced /site/entities/TicketCommentEntity and site/TicketComment, so they fit within a 
  * more normal entity structure but allows Instant data type and array of large attachments 
@@ -42,7 +43,7 @@ import com.prod.custSuptMaven.site.converters.InstantConverter;
 import com.prod.custSuptMaven.site.entities.Attachment;
 import com.prod.custSuptMaven.site.entities.UserPrincipal;
 import com.prod.custSuptMaven.site.validation.NotBlank;
-
+// 02/17/17- 2 problems. 1- ticket comment wont add w or w/o atmt.  2-cant load ticket atmtn- but can add an atmt.  check if out of c drive when attached
 //see ..entities/Ticket for details on annotations
 @Entity
 @Table(name = "TicketComment")
