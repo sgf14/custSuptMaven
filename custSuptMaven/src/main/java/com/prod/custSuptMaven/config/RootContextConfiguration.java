@@ -1,4 +1,4 @@
-package com.prod.custSuptMaven.config;
+ package com.prod.custSuptMaven.config;
 /* class notes: rootContext will initiate all other contexts in MVC model, including servletContext(s) in config package. see pg 328,331,349.
  * bootstrap feeds Root, which then feeds Web and RestContexts(Servlets in short).  those in turn support commons for site package.  Root,Web, 
  * and Rest contain items that all downstream classes use

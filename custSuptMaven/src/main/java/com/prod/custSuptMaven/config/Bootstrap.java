@@ -1,8 +1,14 @@
 package com.prod.custSuptMaven.config;
-//package notes:  /config package instantiates SpringMVC and /site package contains site specific code
-/*class notes: bootstrap initializes Spring MVC 
- * based on POM dependencies.  if using Java vs XML instantiation then @annotation methods are used extensively in 
- * Spring MVC
+/*package notes:  see chap 12, pg 333 for programatic (java, not xml) for how this works. /config package instantiates SpringMVC and 
+ *site package contains site specific code.
+ *class notes: bootstrap initializes Spring MVC.  per page 333 the key here is that Spring dependency is in POM 
+ * (see artifact id spring-webmvc) and it scans the app for
+ * a WebApplicationInitializer class (in onStartup method below) therefore the the path ../com.prod..config/ path is not actually
+ * referenced or called directly anywhere.  Regardless of what your bootstrap class is named Spring is only looking for an implementattion of
+ * WebApplicationInitializer class. Regardless of what file contains it- and it bootstraps Spring App from there.  the preferred name for 
+ * this housing class contains the name bootstrap only by convention.
+ * See Spring POM dependencies and explanation in chap 12.  if using Java vs XML instantiation then @annotation methods are used extensively in 
+ * Spring MVC, as you will note in Bootstrap, Root Context and WebServletContext..
  */
 import com.prod.custSuptMaven.site.AuthenticationFilter;
 import com.prod.custSuptMaven.site.LoggingFilter;
@@ -28,7 +34,10 @@ public class Bootstrap implements WebApplicationInitializer {
 	@Override
     public void onStartup(ServletContext container) throws ServletException
     {
-        //registers ancillary items to classpath.  see JWA chap 12, pg 349
+        //registers ancillary items to WEB-INF dir for UI.  In this case for css etc.  see JWA chap 12, pg 349
+		// note that \webapp\resource is a peer to webapp\WEB-INF.  it wouldnt get registered by server w/o addMapping() method below.
+		// WEB-INF and META-INF are autoregistered, anything you add for support functions isnt by default
+		//Note this is different from src/main/resources which houses java resources
 		//to add new right click Java resources/new Source Folder, then enter project name and src/main/xxx
 		container.getServletRegistration("default").addMapping("/resource/*");
         
