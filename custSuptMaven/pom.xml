@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project 	xmlns="http://maven.apache.org/POM/4.0.0" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+								http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.prod</groupId>
     <artifactId>custSuptMaven</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>18.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
-
+<!--project versions
+follows book version POM format. ie customer-support-v9 = 9.0.0-SNAPSHOT above
+-->
     <name>custSuptMaven</name>
+    
+<!-- note- versions matter.  its best to use properties tag group below to keep groups of dependencies the same. 
+found particular issues with Spring and Hibernate ORM- where new versions were not compatible with book versions.  once changed to match
+book versions (and customer-service-v15) the app worked and connected to db properly.  before then, was getting a variety of server app launch issues
+and startup errors
+-->
 
     <properties>
-        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<!-- can use these version tags so you only have to change ver # in a single place.  not used yet for jackson or logging, left commented out -->
+        <jackson.version>2.4.2</jackson.version>
+        <log4j.version>2.0.2</log4j.version>
+        <spring.framework.version>4.0.6.RELEASE</spring.framework.version>
+        <hibernate.validator.version>5.1.2.Final</hibernate.validator.version>
     </properties>
     
     <dependencies>
@@ -67,70 +82,266 @@
         	<version>3.0.0</version>
         	<scope>provided</scope>
         </dependency>
+ <!-- websockets/chat style functionality- introduced JWA chap 10 pg 288 -->       
+        <dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
 <!-- jsp expression language- introduced JWA chap 8 pg 209- custom tags -->
         <dependency>
         	<groupId>org.apache.commons</groupId>
         	<artifactId>commons-lang3</artifactId>
         	<version>3.3.2</version>
+        	<scope>compile</scope>
         </dependency>
         <dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
         	<artifactId>jackson-core</artifactId>
-        	<version>2.3.2</version>
+        	<version>${jackson.version}</version>
+        	<scope>compile</scope>
         </dependency>
         <dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
         	<artifactId>jackson-annotations</artifactId>
-        	<version>2.3.2</version>
+        	<version>${jackson.version}</version>
+        	<scope>compile</scope>
         </dependency>
         <dependency>
         	<groupId>com.fasterxml.jackson.core</groupId>
         	<artifactId>jackson-databind</artifactId>
-        	<version>2.3.2</version>
+        	<version>${jackson.version}</version>
+        	<scope>compile</scope>
         </dependency>
         <dependency>
         	<groupId>com.fasterxml.jackson.datatype</groupId>
         	<artifactId>jackson-datatype-jsr310</artifactId>
-        	<version>2.3.2</version>
+        	<version>${jackson.version}</version>
+        	<scope>compile</scope>
         </dependency>
-        <dependency>
-        	<groupId>javax.websocket</groupId>
-        	<artifactId>javax.websocket-api</artifactId>
-        	<version>1.0</version>
-        	<scope>provided</scope>
-        </dependency>
+        
+<!-- logging- introduced JWA chap 11 pg 312 -->        
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-api</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
+        	<scope>compile</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-core</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
         	<scope>runtime</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-jcl</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
         	<scope>runtime</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-slf4j-impl</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
         	<scope>runtime</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.logging.log4j</groupId>
         	<artifactId>log4j-taglib</artifactId>
-        	<version>2.0</version>
+        	<version>${log4j.version}</version>
         	<scope>runtime</scope>
         </dependency>
+<!-- SpringMVC and support- introduced JWA chap 12/13 pg 324 -->         
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.2</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.framework.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        
+<!--the hibernate orm and java persistence dependancies below are sensitive to version
+w/o the right corresponding versions you will get server errors and app wont launch
+-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+            <version>${spring.framework.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>${spring.framework.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Spring Rest Web Services support.  note- no SOAP dependencies- introduced JWA chap 17 -->       
+        <dependency>
+        	<groupId>org.springframework</groupId>
+        	<artifactId>spring-aop</artifactId>
+        	<version>${spring.framework.version}</version>
+        	<scope>compile</scope>
+        </dependency>
+        
+        <!-- Spring implementation of Hibernate ORM- introduced JWA chap 21-->        
+        <dependency>
+        	<groupId>org.springframework</groupId>
+        	<artifactId>spring-orm</artifactId>
+        	<version>${spring.framework.version}</version>
+        	<scope>compile</scope>
+        </dependency>
+        
+<!-- Hibernate Bean validator- introduced JWA chap 16 -->
+<!-- intentionally do not have maven dependency listed on pg 457 annotation processor.  may add later -->
+        <dependency>
+        	<groupId>javax.validation</groupId>
+        	<artifactId>validation-api</artifactId>
+        	<version>1.1.0.Final</version>
+        	<scope>compile</scope>
+        </dependency>
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-validator</artifactId>
+        	<version>${hibernate.validator.version}</version>
+        	<scope>runtime</scope>
+        	<exclusions>
+        		<exclusion>
+        			<groupId>org.jboss.logging</groupId>
+        			<artifactId>jboss-logging</artifactId>
+        		</exclusion>
+        	</exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator-annotation-processor</artifactId>
+            <version>${hibernate.validator.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+        	<groupId>org.jboss.logging</groupId>
+        	<artifactId>jboss-logging</artifactId>
+        	<version>3.2.0.Beta1</version>
+        	<scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.ws</groupId>
+            <artifactId>spring-ws-core</artifactId>
+            <version>2.1.4.RELEASE</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.xml.stream</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+ 
+<!-- did not implement chap 18 messaging/clustering.  use Cloud deployment if that type of substantial expansion is needed  -->
+<!-- Part III- JPA and Hibernate mySQL persistence- introduced JWA chap 20. Chap 19 intro had no maven dep-->
+        <dependency>
+        	<groupId>org.eclipse.persistence</groupId>
+        	<artifactId>javax.persistence</artifactId>
+        	<version>2.1.0</version>
+        	<scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+        	<groupId>javax.transaction</groupId>
+        	<artifactId>javax.transaction-api</artifactId>
+        	<version>1.2</version>
+        	<scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+        	<groupId>org.hibernate</groupId>
+        	<artifactId>hibernate-entitymanager</artifactId>
+        	<version>4.3.6.Final</version>
+        	<scope>runtime</scope>
+        	<exclusions>
+        		<exclusion>
+        			<groupId>org.hibernate.javax.persistence</groupId>
+        			<artifactId>hibernate-jpa-2.1-api</artifactId>
+        		</exclusion>
+        		<exclusion>
+        			<groupId>org.jboss.spec.javax.transaction</groupId>
+        			<artifactId>jboss-transaction-api_1.2_spec</artifactId>
+        		</exclusion>
+        		<exclusion>
+        			<groupId>xml-apis</groupId>
+        			<artifactId>xml-apis</artifactId>
+        		</exclusion>
+        		<exclusion>
+        			<groupId>org.jboss.logging</groupId>
+        			<artifactId>jboss-logging</artifactId>
+        		</exclusion>
+        	</exclusions>
+        </dependency>
+
+        <dependency>
+        	<groupId>org.javassist</groupId>
+        	<artifactId>javassist</artifactId>
+        	<version>3.18.2-GA</version>
+        	<scope>runtime</scope>
+        </dependency>
+        
+<!-- this was on pg 628- not in intro section.  encrypt password -->
+        <dependency>
+        	<groupId>org.mindrot</groupId>
+        	<artifactId>jbcrypt</artifactId>
+        	<version>0.3m</version>
+        </dependency>
+        
+<!-- chap 22- Spring data jpa.  next 2.  Eliminates GenericJpa's to repl w CrudRepository annotation/interface -->
+        <dependency>
+        	<groupId>org.springframework.data</groupId>
+        	<artifactId>spring-data-jpa</artifactId>
+        	<version>1.5.3.RELEASE</version>
+        	<scope>compile</scope>
+        	<exclusions>
+        		<exclusion>
+        			<groupId>org.slf4j</groupId>
+        			<artifactId>jcl-over-slf4j</artifactId>
+        		</exclusion>
+        	</exclusions>
+        </dependency>
+<!--         SLF4J JCL bridge is excluded above due to use of log4j 2  -->
+        <dependency>
+        	<groupId>org.slf4j</groupId>
+        	<artifactId>slf4j-api</artifactId>
+        	<version>1.7.7</version>
+        	<scope>runtime</scope>
+        </dependency>
+        
     </dependencies>
 
     <build>
+    	<sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -139,9 +350,9 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <compilerArguments>
-                        <endorseddirs>${endorsed.dir}</endorseddirs>
-                    </compilerArguments>
+<!--                     <compilerArguments> -->
+<!--                         <endorseddirs>${endorsed.dir}</endorseddirs> -->
+<!--                     </compilerArguments> -->
                 </configuration>
             </plugin>
             <plugin>
@@ -150,6 +361,8 @@
                 <version>2.3</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+<!--                     have the option to redirect web UI files to another folder using this tagset WEB-INF dir will be placed as a child of below-->
+<!--                     <warSourceDirectory>web</warSourceDirectory> -->
                 </configuration>
             </plugin>
             <plugin>

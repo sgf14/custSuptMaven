@@ -10,3 +10,7 @@
 <%@ taglib prefix="wrox" uri="http://www.wrox.com/jsp/tld/wrox" %>
 <%@ taglib prefix="template" tagdir="/WEB-INF/tags/template" %>
 
+<!-- function tag library introduced in chap 13- Spring Forms pg 380-->
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
