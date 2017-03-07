@@ -9,6 +9,8 @@ package com.prod.custSuptMaven.config.bootstrap;
  * this housing class contains the name bootstrap only by convention.
  * See Spring POM dependencies and explanation in chap 12.  if using Java vs XML instantiation then @annotation methods are used extensively in 
  * Spring MVC, as you will note in Bootstrap, Root Context and WebServletContext..
+ * 
+ * Chap 26 Spring Security refactored this original Bootstrap class to FrameworkBootstrap, as detailed in pg 767-68.
  */
 import com.prod.custSuptMaven.config.RestServletContextConfiguration;
 import com.prod.custSuptMaven.config.RootContextConfiguration;
