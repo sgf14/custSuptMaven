@@ -1,4 +1,4 @@
-package com.prod.custSuptMaven.config;
+package com.prod.custSuptMaven.config.bootstrap;
 /*package notes:  see chap 12, pg 333 for programatic (java, not xml) for how this works. /config package instantiates SpringMVC and 
  *site package contains site specific code.
  *class notes: bootstrap initializes Spring MVC.  per page 333 the key here is that Spring dependency is in POM 
@@ -10,11 +10,15 @@ package com.prod.custSuptMaven.config;
  * See Spring POM dependencies and explanation in chap 12.  if using Java vs XML instantiation then @annotation methods are used extensively in 
  * Spring MVC, as you will note in Bootstrap, Root Context and WebServletContext..
  */
+import com.prod.custSuptMaven.config.RestServletContextConfiguration;
+import com.prod.custSuptMaven.config.RootContextConfiguration;
+import com.prod.custSuptMaven.config.WebServletContextConfiguration;
 import com.prod.custSuptMaven.site.AuthenticationFilter;
 import com.prod.custSuptMaven.site.LoggingFilter;
 import com.prod.custSuptMaven.site.SessionListener;
 //for below- as with any class it doesnt need to be explicitly imported if its in a common folder/package, even though it is used
 //import com.prod.custSuptMaven.config.RootContextConfiguration;  
+
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
@@ -29,7 +33,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 @SuppressWarnings("unused")
-public class Bootstrap implements WebApplicationInitializer {
+public class FrameworkBootstrap implements WebApplicationInitializer {
 	//as with all Overrides this annotation indicates its method overrides a method within the implemented class
 	@Override
     public void onStartup(ServletContext container) throws ServletException
