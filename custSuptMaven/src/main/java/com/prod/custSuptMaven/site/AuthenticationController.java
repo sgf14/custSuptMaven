@@ -8,6 +8,9 @@ the benefit of this is new interfaces- desktop, mobile tablet, etc- all reside i
 this is an optional architecture designed to support more complex apps, and Spring does not enforce its usage, but it is an option
 to manage complexity by breaking it into smaller pieces.
 the in memory user db in LoginServlet got moved to its own Repository class
+
+Chap 26 Spring Security- note this class was heavily refactored- and simplified- to implement the spring security code.  
+See pg 774-75.  see github chap 21 ver for prior versions
 */
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

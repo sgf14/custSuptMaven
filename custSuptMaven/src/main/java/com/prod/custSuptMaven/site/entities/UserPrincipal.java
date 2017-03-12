@@ -9,16 +9,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
-import javax.servlet.http.HttpSession;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.Serializable;
-import java.security.Principal;
+import java.util.Arrays;
+import java.util.Collection;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -30,17 +32,22 @@ import java.security.Principal;
         getterVisibility = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility = JsonAutoDetect.Visibility.NONE,
         setterVisibility = JsonAutoDetect.Visibility.NONE)
-public class UserPrincipal implements Principal, Cloneable, Serializable
+
+public class UserPrincipal implements Authentication, Cloneable
 {
     private static final long serialVersionUID = 1L;
-
-    private static final String SESSION_ATTRIBUTE_KEY = "com.prod.custSuptMaven.user.principal";
+    
+    //var removed by chap 26 implementing Authentication vs Principal
+    //private static final String SESSION_ATTRIBUTE_KEY = "com.prod.custSuptMaven.user.principal";
 
     private long id;
 
     private String username;
 
     private byte[] password;
+    
+    //var added by chap 26 spring security ,pg 770
+    private boolean authenticated;
 
     @Id
     @Column(name = "UserId")
@@ -55,13 +62,6 @@ public class UserPrincipal implements Principal, Cloneable, Serializable
     public void setId(long id)
     {
         this.id = id;
-    }
-
-    @Override
-    @Transient
-    public String getName()
-    {
-        return this.username;
     }
 
     @Basic
@@ -88,6 +88,50 @@ public class UserPrincipal implements Principal, Cloneable, Serializable
     {
         this.password = password;
     }
+    
+    //next several code blocks added chap 26 spring security, pg 770 implements extended Authentication class methods within this class.  
+    //similar to any other interface Note @override annotation. chap 26 version is boilerplate method impl, but is customized in chap 27.
+    @Override
+    @Transient
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+    	return Arrays.asList();
+    }
+    
+    @Override
+    @Transient
+    public String getName() {
+    	return this.username;
+    }
+    
+    @Override
+    @Transient
+    public Object getPrincipal() {
+    	return this.username;
+    }
+    
+    @Override
+    @Transient
+    public Object getDetails() {
+    	return this.username;
+    }
+    
+    @Override
+    @Transient
+    public Object getCredentials() {
+    	return this.password;
+    }
+    
+    @Override
+    @Transient
+    public boolean isAuthenticated() {
+    	return this.authenticated;
+    }
+    
+    @Override
+    public void setAuthenticated(boolean authenticated) {
+    	this.authenticated = authenticated;
+    }
+    //end of chap 26 method adds
 
     @Override
     public int hashCode()
@@ -118,7 +162,8 @@ public class UserPrincipal implements Principal, Cloneable, Serializable
     {
         return this.username;
     }
-
+    // these methods removed when Part IV chap 26 Spring security implemented
+    /*
     public static Principal getPrincipal(HttpSession session)
     {
         return session == null ? null :
@@ -129,4 +174,5 @@ public class UserPrincipal implements Principal, Cloneable, Serializable
     {
         session.setAttribute(SESSION_ATTRIBUTE_KEY, principal);
     }
+    */
 }

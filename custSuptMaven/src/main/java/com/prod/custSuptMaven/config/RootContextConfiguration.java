@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -79,6 +80,9 @@ import javax.sql.DataSource;
         basePackages = "com.prod.custSuptMaven.site",
         excludeFilters = @ComponentScan.Filter({Controller.class, ControllerAdvice.class})
 )
+//added by chap 26 Spring Security- note whole class is imported as annotation.  no other supporting/overriding methods below are needed
+@Import({SecurityConfiguration.class })
+
 //in initial projects this class was vacant but starting chap 13/14 it initiates the commons- see pg 348 vs 375/76 as an example
 public class RootContextConfiguration
         implements AsyncConfigurer, SchedulingConfigurer
