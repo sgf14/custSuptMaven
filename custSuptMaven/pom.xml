@@ -27,6 +27,7 @@ and startup errors
         <log4j.version>2.0.2</log4j.version>
         <spring.framework.version>4.0.6.RELEASE</spring.framework.version>
         <hibernate.validator.version>5.1.2.Final</hibernate.validator.version>
+        <spring.security.version>3.2.5.RELEASE</spring.security.version>
     </properties>
     
     <dependencies>
@@ -338,14 +339,14 @@ w/o the right corresponding versions you will get server errors and app wont lau
         <dependency>
         	<groupId>org.springframework.security</groupId>
         	<artifactId>spring-security-web</artifactId>
-        	<version>3.2.0.RELEASE</version>
+        	<version>${spring.security.version}</version>
         	<scope>compile</scope>
         </dependency>
         
         <dependency>
         	<groupId>org.springframework.security</groupId>
         	<artifactId>spring-security-config</artifactId>
-        	<version>3.2.0.RELEASE</version>
+        	<version>${spring.security.version}</version>
         	<scope>compile</scope>        	
         </dependency>
         
@@ -353,7 +354,7 @@ w/o the right corresponding versions you will get server errors and app wont lau
         <dependency>
         	<groupId>org.springframework.security</groupId>
         	<artifactId>spring-security-crypto</artifactId>
-        	<version>3.2.0.RELEASE</version>
+        	<version>${spring.security.version}</version>
         	<scope>compile</scope>
         </dependency>
         

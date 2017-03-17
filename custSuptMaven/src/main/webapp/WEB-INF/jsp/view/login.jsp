@@ -3,25 +3,19 @@
 <%--@elvariable id="validationErrors" type="java.util.Set<javax.validation.ConstraintViolation>"--%>
 <spring:message code="title.login" var="loginTitle" />
 <template:loggedOut htmlTitle="${loginTitle}" bodyTitle="${loginTitle}">
-    <spring:message code="message.login.instruction" /><br /><br />
-    <c:if test="${loginFailed}">
+    <c:if test="${param.containsKey('loginFailed)}">
         <b class="errors"><spring:message code="error.login.failed" /></b><br />
+    </c:if> 
+    <c:if test="${param.containsKey('loggedOut)}">
+        <i><spring:message code="message.login.loggedOut" /></i><br /><br />
     </c:if>
-    <c:if test="${validationErrors != null}"><div class="errors">
-        <ul>
-            <c:forEach items="${validationErrors}" var="error">
-                <li><c:out value="${error.message}" /></li>
-            </c:forEach>
-        </ul>
-    </div>
-    </c:if>
-    <form:form method="post" modelAttribute="loginForm">
+    <spring:message code="message.login.instruction" /><br /><br />
+    <form:form method="post" modelAttribute="loginForm" autocomplete="off">
         <form:label path="username"><spring:message code="field.login.username" /></form:label><br />
-        <form:input path="username" /><br />
-        <form:errors path="username" cssClass="errors" /><br />
+        <form:input path="username" autocomplete="off"/><br />        
         <form:label path="password"><spring:message code="field.login.password" /></form:label><br />
-        <form:password path="password" /><br />
-        <form:errors path="password" cssClass="errors" /><br />
+        <form:password path="password" autocomplete="off"/><br />
+        
         <input type="submit" value="<spring:message code="field.login.submit" />" />
     </form:form>
 </template:loggedOut>

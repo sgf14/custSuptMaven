@@ -6,9 +6,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionDestroyedEvent;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
-import com.prod.custSuptMaven.site.SessionRegistry;
 import com.prod.custSuptMaven.site.entities.UserPrincipal;
 
 import javax.annotation.PostConstruct;
@@ -48,7 +49,7 @@ public class ChatEndpoint
     private static final byte[] pongData =
             "This is PONG country.".getBytes(StandardCharsets.UTF_8);
 
-    private final Consumer<HttpSession> callback = this::httpSessionRemoved;
+    private final Consumer<SessionDestroyedEvent> callback = this::httpSessionRemoved;
 
     private boolean closed = false;
     private Session wsSession;
@@ -60,7 +61,7 @@ public class ChatEndpoint
     private Locale locale;
     private Locale otherLocale;
 
-    @Inject SessionRegistry sessionRegistry;
+    @Inject SessionDestroyedListener sessionDestroyedListener;
     @Inject ChatService chatService;
     @Inject MessageSource messageSource;
     @Inject TaskScheduler taskScheduler;
@@ -229,7 +230,7 @@ public class ChatEndpoint
     @PostConstruct
     public void initialize()
     {
-        this.sessionRegistry.registerOnRemoveCallback(this.callback);
+        this.sessionDestroyedListener.registerOnRemoveCallback(this.callback);
 
         this.pingFuture = this.taskScheduler.scheduleWithFixedDelay(
                 this::sendPing,
@@ -238,9 +239,10 @@ public class ChatEndpoint
         );
     }
 
-    private void httpSessionRemoved(HttpSession httpSession)
+    private void httpSessionRemoved(SessionDestroyedEvent event)
     {
-        if(httpSession == this.httpSession)
+        String sessionId = event.getId();
+    	if(sessionId.equals(this.httpSession.getId()))
         {
             synchronized(this)
             {
@@ -258,7 +260,7 @@ public class ChatEndpoint
         this.closed = true;
         if(!this.pingFuture.isCancelled())
             this.pingFuture.cancel(true);
-        this.sessionRegistry.deregisterOnRemoveCallback(this.callback);
+        this.sessionDestroyedListener.deregisterOnRemoveCallback(this.callback);
         ChatMessage message = null;
         if(this.chatSession != null)
             message = this.chatService.leaveSession(this.chatSession,
@@ -356,7 +358,7 @@ public class ChatEndpoint
             HttpSession httpSession = (HttpSession)request.getHttpSession();
             config.getUserProperties().put(HTTP_SESSION_KEY, httpSession);
             config.getUserProperties()
-                    .put(PRINCIPAL_KEY, UserPrincipal.getPrincipal(httpSession));
+                    .put(PRINCIPAL_KEY, SecurityContextHolder.getContext().getAuthentication());
             config.getUserProperties().put(LOCALE_KEY,
                     LocaleContextHolder.getLocale());
 

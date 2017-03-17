@@ -16,16 +16,7 @@ package com.prod.custSuptMaven.config.bootstrap;
 import com.prod.custSuptMaven.config.RestServletContextConfiguration;
 import com.prod.custSuptMaven.config.RootContextConfiguration;
 import com.prod.custSuptMaven.config.WebServletContextConfiguration;
-import com.prod.custSuptMaven.site.AuthenticationFilter;
 import com.prod.custSuptMaven.site.PreSecurityLoggingFilter;
-import com.prod.custSuptMaven.site.SessionListener;
-//for below- as with any class it doesnt need to be explicitly imported if its in a common folder/package, even though it is used
-//import com.prod.custSuptMaven.config.RootContextConfiguration;  
-
-
-
-
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.annotation.Order;
@@ -57,6 +48,7 @@ public class FrameworkBootstrap implements WebApplicationInitializer {
 		// WEB-INF and META-INF are autoregistered, anything you add for support functions isnt by default
 		//Note this is different from src/main/resources which houses java resources
 		//to add new right click Java resources/new Source Folder, then enter project name and src/main/xxx
+        
 		container.getServletRegistration("default").addMapping("/resource/*");
         
         //root context registers all other contexts including servlet via ..LoaderListener...  see pg 328, 349 
@@ -64,7 +56,8 @@ public class FrameworkBootstrap implements WebApplicationInitializer {
                 new AnnotationConfigWebApplicationContext();
         rootContext.register(RootContextConfiguration.class);
         container.addListener(new ContextLoaderListener(rootContext));
-        container.addListener(SessionListener.class);
+        //container add below removed as part of chap 26 Spring Security- these classes extended from spring instead of independent build
+        //container.addListener(SessionListener.class);
         
         //servlet context registers all Web servers (ie @Controller methods and by convention ending in ..Controller in site package)
         AnnotationConfigWebApplicationContext webContext =

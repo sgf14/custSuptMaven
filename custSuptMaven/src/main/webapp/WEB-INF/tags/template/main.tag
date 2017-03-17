@@ -1,3 +1,4 @@
+<%--@elvariable id="_csrf" type="org.springframework.security.web.csrf.CsrfToken"--%>
 <%@ tag body-content="scriptless" trimDirectiveWhitespaces="true" %>
 <%@ attribute name="htmlTitle" type="java.lang.String" rtexprvalue="true"
               required="true" %>
@@ -25,6 +26,9 @@
                             name: key, value: fields[key]
                         }));
                 }
+                form.append($('<input type="hidden">').attr({
+                    name: '${_csrf.parameterName}', value: '${_csrf.token}'
+                }));
                 $('body').append(form);
                 form.submit();
             };

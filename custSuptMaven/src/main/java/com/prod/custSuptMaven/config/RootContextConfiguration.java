@@ -95,7 +95,7 @@ public class RootContextConfiguration
     @Inject LoadTimeWeaver loadTimeWeaver; // TODO: remove when SPR-10856 fixed
     
     //Internationalization see chap 15. commons methods in this location.  See chap 15, if additions are needed.
-    //these will contain all the UI messages refered to in java code.  only English versions in place now
+    //these will contain all the UI messages referred to in java code.  only English versions in place now
     @Bean
     public MessageSource messageSource()
     {

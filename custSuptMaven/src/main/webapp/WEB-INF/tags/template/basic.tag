@@ -24,7 +24,8 @@
            onclick="newChat();">Chat with Support</a><br />
         <a href="<c:url value="/chat/list" />">View Chat Requests</a><br />
         <a href="<c:url value="/session/list" />">List Sessions</a><br />
-        <a href="<c:url value="/logout" />">Log Out</a><br />
+        <a href="javascript:void 0;"
+           onclick="postInvisibleForm('<c:url value="/logout" />', { });"><spring:message code="nav.item.logout" /></a><br />
         <jsp:invoke fragment="extraNavigationContent" />
     </jsp:attribute>
     <jsp:body>

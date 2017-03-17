@@ -1,5 +1,8 @@
 package com.prod.custSuptMaven.config;
-
+/* class notes: entire class added by chap 26- spring security, pg 771-2
+ * this is part of substantial changes to UserPrincipal and Authentication... classes as noted in chap 26.
+ * note how this is imported into RootContext config class
+ */
 import javax.inject.Inject;
 
 import org.springframework.context.annotation.Bean;
@@ -14,11 +17,6 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 
 import com.prod.custSuptMaven.site.AuthenticationService;
 
-
-/* class notes: entire class added by chap 26- spring security, pg 771-2
- * this is part of substantial changes to UserPrincipal and Authentication... classes as noted in chap 26.
- * note how this is imported into RootContext config class
- */
 @Configuration
 @EnableWebMvcSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -40,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	// see pg 771- excludes static resources and possible favicon
 	@Override
 	public void configure(WebSecurity security) {
-		security.ignoring().antMatchers("/resources/**", "/favicon.ico");
+		security.ignoring().antMatchers("/resource/**", "/favicon.ico");
 	}
 	
 	@Override
