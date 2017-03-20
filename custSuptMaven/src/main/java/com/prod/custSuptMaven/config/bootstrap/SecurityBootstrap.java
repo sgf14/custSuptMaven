@@ -1,5 +1,5 @@
 package com.prod.custSuptMaven.config.bootstrap;
-/* class notes; introduded chap 26, pg 769- Spring Security as part of bootstrap refactoring
+/* class notes; introduced chap 26, pg 769- Spring Security as part of bootstrap refactoring
  * 
  */
 import org.apache.logging.log4j.LogManager;

@@ -30,8 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 	
 	@Override
-	protected void configure (AuthenticationManagerBuilder builder)
-		throws Exception {
+	protected void configure (AuthenticationManagerBuilder builder) {
 		builder.authenticationProvider(this.authenticationService);
 	}
 	
@@ -41,6 +40,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		security.ignoring().antMatchers("/resource/**", "/favicon.ico");
 	}
 	
+	/* 03/20/17- app is failing to launch at this point- it gets past block above, but cant register this Spring Security filter chain somehow.  
+	 * not sure how this is going wrong.  double checked the code for types in this class and code block
+	 * See log files v-19 version vs custSuptMaven version.  seems like it may be related to an error in JPA EntityManagerFactory or 
+	 * not getting to login page properly
+	 * still working on this.
+	 */
 	@Override
 	protected void configure(HttpSecurity security) throws Exception {
 		security

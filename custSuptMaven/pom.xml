@@ -30,6 +30,16 @@ and startup errors
         <spring.security.version>3.2.5.RELEASE</spring.security.version>
     </properties>
     
+<!--  first noticed this tag set in chap 26 trying to fix Spring Security non-start issue.  Didnt fix the problem, but didnt break app compile either. go 
+back in chaps and see where this was introduced and what it does.    -->
+   <repositories>
+        <repository>
+            <id>repository.springsource.snapshot</id>
+            <name>SpringSource Milestone Repository</name>
+            <url>http://repo.springsource.org/milestone</url>
+        </repository>
+    </repositories>
+    
     <dependencies>
 <!--  servlet. similar to chap 3 JWA, but this is created as part of maven archetype when project created -->
         <dependency>

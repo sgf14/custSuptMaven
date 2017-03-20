@@ -1,5 +1,5 @@
 <%--@elvariable id="loginFailed" type="java.lang.Boolean"--%>
-<%--@elvariable id="loginForm" type="com.prod.custSuptMaven.site.AuthenticationController.Form"--%>
+<%--@elvariable id="loginForm" type="com.prod.custSuptMaven.site.AuthenticationController.LoginForm"--%>
 <%--@elvariable id="validationErrors" type="java.util.Set<javax.validation.ConstraintViolation>"--%>
 <spring:message code="title.login" var="loginTitle" />
 <template:loggedOut htmlTitle="${loginTitle}" bodyTitle="${loginTitle}">
