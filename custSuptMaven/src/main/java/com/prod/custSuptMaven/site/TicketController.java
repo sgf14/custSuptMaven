@@ -185,7 +185,7 @@ public class TicketController
         for(MultipartFile filePart : form.getAttachments())
         {
             //TODO- enhancement- attachment size error page.  if file is too large app boms out and fails out to jsp html error page.  could make this 
-        	// a little more user freindly and tell them attachment is too large and try again.  in Ticket or TickerComment attach 
+        	// a little more user friendly and tell them attachment is too large and try again.  in Ticket or TickerComment attach 
         	// c:\ins.pdf as example 
         	log.info("Processing attachment for new ticket comment.");
             Attachment attachment = new Attachment();

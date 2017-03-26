@@ -3,10 +3,9 @@
 <%--@elvariable id="validationErrors" type="java.util.Set<javax.validation.ConstraintViolation>"--%>
 <spring:message code="title.login" var="loginTitle" />
 <template:loggedOut htmlTitle="${loginTitle}" bodyTitle="${loginTitle}">
-    <c:if test="${param.containsKey('loginFailed)}">
+    <c:if test="${param.containsKey('loginFailed')}">
         <b class="errors"><spring:message code="error.login.failed" /></b><br />
-    </c:if> 
-    <c:if test="${param.containsKey('loggedOut)}">
+    </c:if><c:if test="${param.containsKey('loggedOut')}">
         <i><spring:message code="message.login.loggedOut" /></i><br /><br />
     </c:if>
     <spring:message code="message.login.instruction" /><br /><br />

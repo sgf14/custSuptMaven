@@ -11,6 +11,6 @@
         <c:if test="${s.sessionId == pageContext.session.id}">
         (<spring:message code="message.sessionList.you" />)</c:if>
         - <spring:message code="message.sessionList.lastActive" />
-        ${wrox:timeIntervalToString(timestamp - s.lastRequest.time)} ago<br />
+         ${wrox:timeIntervalToString(timestamp - s.lastRequest.time)} ago<br />
     </c:forEach>
 </template:basic>
