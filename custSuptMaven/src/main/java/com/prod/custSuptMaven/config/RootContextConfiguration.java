@@ -80,7 +80,8 @@ import javax.sql.DataSource;
         basePackages = "com.prod.custSuptMaven.site",
         excludeFilters = @ComponentScan.Filter({Controller.class, ControllerAdvice.class})
 )
-//added by chap 26 Spring Security- note whole class is imported as annotation.  no other supporting/overriding methods below are needed
+//added by chap 26 Spring Security authentication- note whole class is imported as annotation.  
+// no other supporting/overriding methods below are needed
 @Import({SecurityConfiguration.class })
 
 //in initial projects this class was vacant but starting chap 13/14 it initiates the commons- see pg 348 vs 375/76 as an example
@@ -105,7 +106,9 @@ public class RootContextConfiguration
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         messageSource.setBasenames(
                 "/WEB-INF/i18n/titles", "/WEB-INF/i18n/messages",
-                "/WEB-INF/i18n/errors", "/WEB-INF/i18n/validation"
+                "/WEB-INF/i18n/errors", "/WEB-INF/i18n/validation",
+                //added by chap 27 authorization, pg 804
+                "classpath:org/springframework/security/messages"
         );
         return messageSource;
     }

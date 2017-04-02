@@ -1,7 +1,11 @@
 package com.prod.custSuptMaven.config;
 /* class notes: entire class added by chap 26- spring security, pg 771-2
  * this is part of substantial changes to UserPrincipal and Authentication... classes as noted in chap 26.
- * note how this is imported into RootContext config class
+ * note how this is imported into RootContext config class.
+ * Security concepts:
+ * Authentication = login.  Check that the person accessing the app is who they say they are.
+ * Authorization = access to resources.  Once logged in [authenticated] this determines what functions 
+ *   in the app the person can use/ has access to.
  */
 import javax.inject.Inject;
 
@@ -61,7 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity security) throws Exception
     {
         security
-                .authorizeRequests()
+        		.authorizeRequests()
                     .anyRequest().authenticated()
                 .and().formLogin()
                     .loginPage("/login").failureUrl("/login?loginFailed")
