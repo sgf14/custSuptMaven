@@ -6,6 +6,7 @@ package com.prod.custSuptMaven.site;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -119,15 +120,18 @@ public class TicketController
      * compare to TicketServlet class/ createTicket method.  Spring makes this simpler.
      */
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public ModelAndView create(Principal principal, @Valid TicketForm form, 
-    						Errors errors, Map<String, Object> model) 
+    //chap 27, pg 808 changes Principal to add @AuthenticationPrincipal method for user level authorization
+    // this applies to any POST methods- and equivalent changes are made below in other class methods
+    public ModelAndView create(@AuthenticationPrincipal UserPrincipal principal, 
+    							@Valid TicketForm form, 
+    							Errors errors, Map<String, Object> model) 
     	throws IOException
     {
         if(errors.hasErrors())
         	return new ModelAndView("ticket/add");
         
     	Ticket ticket = new Ticket();
-    	ticket.setCustomer((UserPrincipal)principal);
+    	ticket.setCustomer(principal);
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
         
@@ -164,7 +168,8 @@ public class TicketController
     //had small omission in form action (not having enctype for atmt) and
     //this requestmapping was never called and therefore java logging didnt trigger either.  didnt get firebug form errors either.
     @RequestMapping(value = "comment/{ticketId}", method = RequestMethod.POST)
-    public ModelAndView comment(Principal principal, @Valid CommentForm form,
+    public ModelAndView comment(@AuthenticationPrincipal UserPrincipal principal, 
+    							@Valid CommentForm form,
                                 Errors errors, Map<String, Object> model,
                                 Pageable page,
                                 @PathVariable("ticketId") long ticketId)
@@ -178,7 +183,7 @@ public class TicketController
             return this.view(model, page, ticketId);
 
         TicketComment comment = new TicketComment();
-        comment.setCustomer((UserPrincipal)principal);
+        comment.setCustomer(principal);
         comment.setBody(form.getBody());
         
         //added in chap 24 for ability to add attcmt to comments

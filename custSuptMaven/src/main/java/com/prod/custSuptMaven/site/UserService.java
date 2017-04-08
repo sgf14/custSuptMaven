@@ -4,10 +4,13 @@ note there is no @Service annotation in the interface itself- thats in the imple
 
 also modified later to include validation annotations- see chap 16
 and Save function as part of persistence adds- chap 21 for saveUser function (allows users to change password)
+
+chapter 27 refactored this to add authorization functions and take advantage to use Spring UserDetailsService.
+It changed file name from AuthenticationService to UserService, along with its default implementation (DefaultUserService.java).
+class is just extending a different Spring interface.
 */
 
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
@@ -16,9 +19,9 @@ import javax.validation.constraints.NotNull;
 import com.prod.custSuptMaven.site.entities.UserPrincipal;
 
 @Validated
-public interface AuthenticationService extends AuthenticationProvider {
+public interface UserService extends UserDetailsService {
 	@Override
-	UserPrincipal authenticate(Authentication authentication);
+	UserPrincipal loadUserByUsername(String username);
 	
 	void saveUser(
 			@NotNull(message = "{validate.authenticate.saveUser}") @Valid

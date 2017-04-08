@@ -9,33 +9,59 @@ package com.prod.custSuptMaven.config;
  */
 import javax.inject.Inject;
 
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.prod.custSuptMaven.site.AuthenticationService;
+import com.prod.custSuptMaven.site.UserService;
 
 @Configuration
 @EnableWebMvcSecurity
+//added by chap 27, pg 809, Spring authorization
+@EnableGlobalMethodSecurity(
+		prePostEnabled = true, order = 0, mode = AdviceMode.PROXY,
+		proxyTargetClass = false
+) 
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	@Inject AuthenticationService authenticationService;
+	@Inject UserService userService;
 	
-	//note SessionRegistry class in previous version of this app was replaced by org.springsecurity version- import above
+	//note chap 26 SessionRegistry class in previous version of this app was replaced by org.springsecurity version- import above
 	//SessionRegistry within app deleted entirely along with listener.  only one left is slightly modified SessionListController
 	@Bean
 	protected SessionRegistry sessionRegistryImpl() {
 		return new SessionRegistryImpl();
 	}
 	
+	//method added by chap 27 , 808- secures the service methods. (change from chap 26 url method, to user level authorization
+	@Bean
 	@Override
-	protected void configure (AuthenticationManagerBuilder builder) {
-		builder.authenticationProvider(this.authenticationService);
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+	
+	//orign chap 26 method changed by chap 27- pg 808 for user level authorization
+	@Override
+	protected void configure (AuthenticationManagerBuilder builder) 
+			throws Exception {
+		//orig chap 26 method
+		//builder.authenticationProvider(this.userService);
+		
+		//revised chap 27 method- pg 808
+		builder
+			.userDetailsService(this.userService)
+				.passwordEncoder(new BCryptPasswordEncoder())
+			.and()
+			.eraseCredentials(true);
 	}
 	
 	// see pg 771- excludes static resources and possible favicon
@@ -44,7 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		security.ignoring().antMatchers("/resource/**", "/favicon.ico");
 	}
 	
-	/* finally fixed 03/26/17.  copied and pasted below block from customer-support-v19.  somehow there was a typo in my
+	/* finally fixed 03/26/17.  chap 26 copied and pasted below block from customer-support-v19.  somehow there was a typo in my
 	 * version manually copied from book.  I havent detected where the error is- see notepadd++ troubleshooting file- but the app launches 
 	 * successfully now.
 	 * Note1- also there was a typo in the assoc login.jsp form (another typo) I didnt enclose ..'loggedOut'.. in closing single quote- 
@@ -66,6 +92,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     {
         security
         		.authorizeRequests()
+        			//next 2 lines added by chap 27 ,pg 812.  chap 27 leaves the rest of this method unchanged
+        			.antMatchers("/session/list")
+        				.hasAuthority("VIEW_USER_SESSIONS")
                     .anyRequest().authenticated()
                 .and().formLogin()
                     .loginPage("/login").failureUrl("/login?loginFailed")

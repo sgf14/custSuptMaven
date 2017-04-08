@@ -6,6 +6,8 @@ package com.prod.custSuptMaven.site;
  */
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 
 import com.prod.custSuptMaven.site.entities.Attachment;
@@ -25,10 +27,14 @@ public interface TicketService
 {
     //CRUD ops and later Search ops for UI and fed to Controller (via DefaultXx implementation only in this app)
 	@NotNull
+	//this annotation introduced by chap 27 Spring security authorization, pg 809, to allow user level authorizations
+	// similar PreAuthorize on remaining service methods below also
+	@PreAuthorize("hasAuthority('VIEW_TICKETS')")
     List<Ticket> getAllTickets();
 	
 	//search method added in chap 23,  used for fulltext style search in this case. see pg 682
 	@NotNull
+	@PreAuthorize("hasAuthority('VIEW_TICKETS')")
 	Page<SearchResult<Ticket>> search(
 			@NotBlank(message = "{validate.ticketService.search.query}")
 				String query,
@@ -37,12 +43,27 @@ public interface TicketService
 				Pageable pageable
 			);
 	
+	
+	@PreAuthorize("hasAuthority('VIEW_TICKETS')")
     Ticket getTicket(
             @Min(value = 1L, message = "{validate.ticketService.getTicket.id}")
                 long id
     );
-    void save(@NotNull(message = "{validate.ticketService.save.ticket}")
-              @Valid Ticket ticket);
+	
+	//chap 27 no requires normal save method to be split into a create and update set- since different user functions
+	//are allowed by different users- see pg 809.  ie users can edit their own tickets, but not others.  admins can do either
+	
+    //pre chap 27
+	//void save(@NotNull(message = "{validate.ticketService.save.ticket}")
+    //          @Valid Ticket ticket);
+	
+	// chap 27 changes to save method into create and update
+	@PreAuthorize("#ticket.id and hasAuthority('CREATE_TICKET')")
+	void create(@NotNull(message = "{validate.ticketService.save.ticket}")
+				@Valid @P("ticket") Ticket ticket
+			);
+			
+	@PreAuthorize("hasAuthority('DELETE_TICKETS')")
     void deleteTicket(long id);
     
     @NotNull

@@ -3,14 +3,22 @@ package com.prod.custSuptMaven.site.entities;
  * then updated again in a fairly substantial was in chap 27- spring authorization.
  * 1st iteration used Principal convention to tie user list to Db table, 2nd then Spring uses this 
  * for user login and 3rd validating which user has access to what resource
+ * 
+ * UserPrincipal scope:  as described in chap 27, pg 805 you do not nescessarily want to combine both the persistence function
+ * of Principal with the security context- as is the case below- however for the sake of simplicity they are combined under
+ * one class in the book project.  separating them out allows them to be more modular, thus matching more closely  a separation 
+ * of concerns model, but also adds to the coding complexity.
  */
 import javax.persistence.Basic;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
@@ -26,6 +34,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -101,10 +110,76 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Cloneab
         this.hashedPassword = password;
     }
     
-    //chap 27 changed this next batch extensively- 04/01/17 edits left off here
+    //chap 27 changed the following section commented code blocks extensively- immediately below is the new authentication AND authorization code.
+    // this group overrided methods in the newly added Spring UserDetails and CredentialsContainer interfaces 
+    @Transient
+    @Override
+    public String getPassword() {
+    	return this.getHashedPassword() == null ? null :
+    		new String(this.getHashedPassword(), StandardCharsets.UTF_8);
+    }
     
+    @Override
+    public void eraseCredentials() {
+    	this.hashedPassword = null;
+    }
     
-    //next several code blocks added chap 26 spring security, pg 770 implements extended Authentication class methods within this class.  
+    @Override
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "UserPrincipal_Authority", joinColumns = {
+    		@JoinColumn(name = "UserId", referencedColumnName = "UserId")
+    })
+    public Set<UserAuthority> getAuthorities() {
+    	return this.authorities;
+    }
+    
+    public void setAuthorities(Set<UserAuthority> authorities) {
+    	this.authorities = authorities;
+    }
+    
+    @Override
+    @XmlElement
+    @JsonProperty
+    public boolean isAccountNonExpired() {
+    	return this.accountNonExpired;
+    }
+    
+    public void setAccountNonExpired(boolean accountNonExpired) {
+    	this.accountNonExpired = accountNonExpired;
+    }
+    
+    @Override
+    @XmlElement
+    @JsonProperty
+    public boolean isAccountNonLocked() {
+    	return this.isAccountNonLocked();
+    }
+    
+    public void setAccountNonLocked(boolean accountNonLocked) {
+    	this.accountNonLocked = accountNonLocked;
+    }
+    
+    @Override
+    public boolean isCredentialsNonExpired() {
+    	return this.credentialsNonExpired;
+    }
+    
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+    	this.credentialsNonExpired = credentialsNonExpired;
+    }
+    
+    @Override
+    @XmlElement
+    @JsonProperty
+    public boolean isEnabled() {
+    	return this.enabled;
+    }
+    
+    public void setEnabled(boolean enabled) {
+    	this.enabled = enabled;
+    }
+    
+    /* OLD AUTHENTICATION ONLY VERSION- next several code blocks added chap 26 spring security, pg 770 implements extended Authentication class methods within this class.  
     //similar to any other interface Note @override annotation. chap 26 version is boilerplate method impl, but is customized in chap 27.
     @Override
     @Transient
@@ -147,20 +222,29 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Cloneab
     	this.authenticated = authenticated;
     }
     //end of chap 26 method adds
-
+	*/
     @Override
     public int hashCode()
     {
         return this.username.hashCode();
     }
-
+    
+    @Override
+    public boolean equals(Object other) {
+    	return other instanceof UserPrincipal &&
+    			((UserPrincipal)other).id == this.id;
+    }
+    
+    // OLD - chap 26 version of equals() method
+    /*
     @Override
     public boolean equals(Object other)
     {
         return other instanceof UserPrincipal &&
                 ((UserPrincipal)other).username.equals(this.username);
     }
-
+	*/
+    
     @Override
     @SuppressWarnings("CloneDoesntDeclareCloneNotSupportedException")
     protected UserPrincipal clone()

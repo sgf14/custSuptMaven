@@ -1,5 +1,12 @@
 package com.prod.custSuptMaven.site;
-
+/* class notes- implements AuthenticationService in a specific version- for use in this app
+ * 
+ * chap 27- pg 807 refactored this fairly extensively, to include re-naming the class from DefaultAuthenticationService 
+ * to DefaultUserService.  
+ * chap 27 introduced authorization (what users are allowed to access in the app) function on top of the 
+ * earlier authentication (verify the user is who they say they are) functions
+ * 
+ */
 import com.prod.custSuptMaven.site.entities.UserPrincipal;
 import com.prod.custSuptMaven.site.repositories.UserRepository;
 
@@ -18,7 +25,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 @Service
-public class DefaultAuthenticationService implements AuthenticationService
+public class DefaultUserService implements UserService
 {
     private static final Logger log = LogManager.getLogger();
     private static final SecureRandom RANDOM;
@@ -40,12 +47,13 @@ public class DefaultAuthenticationService implements AuthenticationService
 
     @Override
     @Transactional
-    public UserPrincipal authenticate(Authentication authentication)
+    public UserPrincipal loadUserByUsername(String username)
     {
-        /*new chap 26 pg 770-71 codeblocks for Spring security.  note use of boilerplate method implementation within UserPrincipal class
-    	//which were part of spring security extension.
+        /*new chap 26 pg 770-71 codeblocks for Spring security- initial authentication only version. See new chap 27 below for comparison 
+         * note use of boilerplate method implementation within UserPrincipal class
+    	 * which were part of spring security extension.
     	 * 
-    	 */
+    	
     	UsernamePasswordAuthenticationToken credentials = 
     			(UsernamePasswordAuthenticationToken)authentication;
     	String username = credentials.getPrincipal().toString();
@@ -82,6 +90,14 @@ public class DefaultAuthenticationService implements AuthenticationService
     @Override
     public boolean supports(Class<?> c) {
     	return c == UsernamePasswordAuthenticationToken.class;
+     */
+    	
+    	//chap 27, pg 807 authorization version
+    	UserPrincipal principal = userRepository.getByUsername(username);
+    	// make sure the authoriries and password are loaded
+    	principal.getAuthorities().size();
+    	principal.getPassword();
+    	return principal;
     }
     
     //chap 26 leaves previous saveUser method unchanged
@@ -93,7 +109,7 @@ public class DefaultAuthenticationService implements AuthenticationService
     	if(newPassword != null && newPassword.length() > 0)
         {
             String salt = BCrypt.gensalt(HASHING_ROUNDS, RANDOM);
-            principal.setPassword(BCrypt.hashpw(newPassword, salt).getBytes());
+            principal.setHashedPassword(BCrypt.hashpw(newPassword, salt).getBytes());
         }
     	//like other DefaultServices this section got changed from add()/update() to save() to match CrudRepo interface
         this.userRepository.save(principal);
