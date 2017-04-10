@@ -150,12 +150,12 @@ public class TicketController
         }
 
         try {
-        	log.info("Saving new ticket");
-        	this.ticketService.save(ticket);
+        	log.info("Creating new ticket");
+        	this.ticketService.create(ticket);
         } catch (ConstraintViolationException e) {
         //redirect to a view after creation
         	model.put("validationErrors", e.getConstraintViolations());
-        	log.info("Erro saving new ticket ", e);
+        	log.info("Error saving new ticket ", e);
         	return new ModelAndView("ticket/add");
         }
         
@@ -204,8 +204,8 @@ public class TicketController
 
         try
         {
-            log.info("saving new ticket comment, ticket id {}", ticketId);
-        	this.ticketService.save(comment, ticketId);
+            log.info("Creating new ticket comment, ticket id {}", ticketId);
+        	this.ticketService.create(comment, ticketId);
         }
         catch(ConstraintViolationException e)
         {

@@ -152,7 +152,7 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Cloneab
     @XmlElement
     @JsonProperty
     public boolean isAccountNonLocked() {
-    	return this.isAccountNonLocked();
+    	return this.accountNonLocked;
     }
     
     public void setAccountNonLocked(boolean accountNonLocked) {

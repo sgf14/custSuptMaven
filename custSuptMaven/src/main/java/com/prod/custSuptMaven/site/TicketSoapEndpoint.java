@@ -51,7 +51,7 @@ public class TicketSoapEndpoint
         if(form.getAttachments() != null)
             ticket.setAttachments(form.getAttachments());
 
-        this.ticketService.save(ticket);
+        this.ticketService.create(ticket);
 
         return ticket;
     }

@@ -24,8 +24,8 @@ import com.prod.custSuptMaven.site.repositories.TicketCommentRepository;
 import com.prod.custSuptMaven.site.repositories.TicketRepository;
 import com.prod.custSuptMaven.site.repositories.UserRepository;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+// import org.apache.logging.log4j.LogManager;
+// import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ import java.util.List;
 @Service
 public class DefaultTicketService implements TicketService
 {
-	private static final Logger log = LogManager.getLogger();
+	// private static final Logger log = LogManager.getLogger();
 	
 	@Inject TicketRepository ticketRepository;
     @Inject TicketCommentRepository commentRepository;
@@ -75,15 +75,28 @@ public class DefaultTicketService implements TicketService
     }
     
   //note the earlier chapter convert method (private method) that was here removed entirely based on chap 24 attachment changes
+    //this original [pre chap 27] method got changed to a create and update- see TicketService interface
+//    @Override
+//    @Transactional
+//    public void save(Ticket ticket)
+//    {
+//    	if(ticket.getId() < 1)
+//            ticket.setDateCreated(Instant.now());
+//
+//        this.ticketRepository.save(ticket);
+//    }
     
     @Override
     @Transactional
-    public void save(Ticket ticket)
-    {
-    	if(ticket.getId() < 1)
-            ticket.setDateCreated(Instant.now());
-
-        this.ticketRepository.save(ticket);
+    public void create(Ticket ticket) {
+    	ticket.setDateCreated(Instant.now());
+    	this.ticketRepository.save(ticket);
+    }
+    
+    @Override
+    @Transactional
+    public void update(Ticket ticket) {
+    	this.ticketRepository.save(ticket);
     }
     
     //the delete method was added in Persistence changes- note that TicketService interface needed to add this new method as well
@@ -103,19 +116,33 @@ public class DefaultTicketService implements TicketService
     }
 
     //as with above private convert method that was here removed entirely based on chap 24 (-v18)changes
+    //save as above- chap 27 spring securuty authorization replaced save with create and update
+//    @Override
+//    @Transactional
+//    public void save(TicketComment comment, long ticketId)
+//    {
+//    	log.info("Entered ticket comment {} save.", ticketId);
+//    	if(comment.getId() < 1)
+//        {
+//            comment.setTicketId(ticketId);
+//            comment.setDateCreated(Instant.now());
+//        }
+//
+//        this.commentRepository.save(comment);
+//    }
     
     @Override
     @Transactional
-    public void save(TicketComment comment, long ticketId)
-    {
-    	log.info("Entered ticket comment {} save.", ticketId);
-    	if(comment.getId() < 1)
-        {
-            comment.setTicketId(ticketId);
-            comment.setDateCreated(Instant.now());
-        }
-
-        this.commentRepository.save(comment);
+    public void create(TicketComment comment, long ticketId) {
+    	comment.setTicketId(ticketId);
+    	comment.setDateCreated(Instant.now());
+    	this.commentRepository.save(comment);
+    }
+    
+    @Override
+    @Transactional
+    public void update(TicketComment comment){
+    	this.commentRepository.save(comment);
     }
 
     @Override

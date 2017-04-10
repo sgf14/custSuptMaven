@@ -1,4 +1,4 @@
-<%--@elvariable id="sessions" type="java.util.List<com.prod.custSuptMaven.chat.ChatSession>"--%>
+<%--@elvariable id="sessions" type="java.util.List<com.prod.custSuptMaven.site.chat.ChatSession>"--%>
 <spring:message code="title.chatList" var="chatTitle" />
 <template:basic htmlTitle="${chatTitle}" bodyTitle="${chatTitle}">
     <c:choose>
@@ -6,10 +6,17 @@
             <i><spring:message code="message.chatList.none" /></i>
         </c:when>
         <c:otherwise>
+        	<security:authorize access="hasAuthority('START_CHAT')"
+        						var="canJoin" />
             <spring:message code="message.chatList.instruction" />:<br /><br />
             <c:forEach items="${sessions}" var="s">
-                <a href="javascript:void 0;"
-                   onclick="join(${s.sessionId});">${s.customerUsername}</a><br />
+            	<c:choose>
+            		<c:when test="${canJoin}">
+                		<a href="javascript:void 0;"
+                   			onclick="join(${s.sessionId});">${s.customerUsername}</a><br />
+                   	</c:when>
+                   	<c:otherwise>${s.customerUsername}</c:otherwise>
+                </c:choose>
             </c:forEach>
         </c:otherwise>
     </c:choose>

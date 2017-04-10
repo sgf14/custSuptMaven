@@ -74,7 +74,7 @@ public class TicketRestEndpoint
         ticket.setBody(form.getBody());
         ticket.setAttachments(form.getAttachments());
 
-        this.ticketService.save(ticket);
+        this.ticketService.create(ticket);
 
         String uri = ServletUriComponentsBuilder.fromCurrentServletMapping()
                 .path("/ticket/{id}").buildAndExpand(ticket.getId()).toString();

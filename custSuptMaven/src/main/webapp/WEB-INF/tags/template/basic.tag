@@ -17,16 +17,32 @@
     </jsp:attribute>
     
 	<jsp:attribute name="navigationContent">
-        <a href="<c:url value="/ticket/list" />">List Tickets</a><br />
-        <a href="<c:url value="/ticket/search" />"><spring:message code="nav.item.search.tickets" /></a><br>
-        <a href="<c:url value="/ticket/create" />">Create a Ticket</a><br />
-        <a href="javascript:void 0;"
-           onclick="newChat();">Chat with Support</a><br />
-        <a href="<c:url value="/chat/list" />">View Chat Requests</a><br />
-        <a href="<c:url value="/session/list" />">List Sessions</a><br />
+		<security:authorize access="hasAuthority('VIEW_TICKETS')">
+        	<a href="<c:url value="/ticket/list" />">List Tickets</a><br />
+        	<a href="<c:url value="/ticket/search" />"><spring:message code="nav.item.search.tickets" /></a><br>
+        </security:authorize>
+        
+        <security:authorize access="hasAuthority('CREATE_TICKET')">
+        	<a href="<c:url value="/ticket/create" />">Create a Ticket</a><br />
+        </security:authorize>
+        
+        <security:authorize access="hasAuthority('CREATE_CHAT_REQUEST')">
+        	<a href="javascript:void 0;"
+           		onclick="newChat();">Chat with Support</a><br />
+        </security:authorize>
+        
+        <security:authorize access="hasAuthority('VIEW_CHAT_REQUESTS')">
+        	<a href="<c:url value="/chat/list" />">View Chat Requests</a><br />
+        </security:authorize>
+        
+        <security:authorize access="hasAuthority('VIEW_USER_SESSIONS')">
+        	<a href="<c:url value="/session/list" />">List Sessions</a><br />
+        </security:authorize>
+        
         <a href="javascript:void 0;"
            onclick="postInvisibleForm('<c:url value="/logout" />', { });"><spring:message code="nav.item.logout" /></a><br />
         <jsp:invoke fragment="extraNavigationContent" />
+        <br>Welcome, <security:authentication property="principal.username"/>!
     </jsp:attribute>
     <jsp:body>
         <jsp:doBody />
