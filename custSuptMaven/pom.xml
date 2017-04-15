@@ -7,7 +7,7 @@
 
     <groupId>com.prod</groupId>
     <artifactId>custSuptMaven</artifactId>
-    <version>20.0.0-SNAPSHOT</version>
+    <version>21.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
 <!--project versions
 follows book version POM format. ie customer-support-v9 = 9.0.0-SNAPSHOT above
@@ -373,10 +373,33 @@ w/o the right corresponding versions you will get server errors and app wont lau
         </dependency>
         
 <!-- added by chap 27 authorization tags note book has ver 3.2.0 instead of normal 3.2.5, may need to revisit-->
+<!-- this turned out not to be a problem- 04/04/17- chap 27 app tested successfully -->
         <dependency>
         	<groupId>org.springframework.security</groupId>
         	<artifactId>spring-security-taglibs</artifactId>
         	<version>${spring.security.version}</version>
+        	<scope>runtime</scope>
+        </dependency>
+
+<!-- following group of 3 added by chap 28- webservice security oAuth -->
+        <dependency>
+        	<groupId>org.springframework.security.oauth</groupId>
+        	<artifactId>spring-security-oauth2</artifactId>
+        	<version>1.0.5.RELEASE</version>
+        	<scope>compile</scope>
+        </dependency>
+
+        <dependency>
+        	<groupId>commons-codec</groupId>
+        	<artifactId>commons-codec</artifactId>
+        	<version>1.9</version>
+        	<scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+        	<groupId>org.apache.httpcomponents</groupId>
+        	<artifactId>httpclient</artifactId>
+        	<version>4.3.5</version>
         	<scope>runtime</scope>
         </dependency>
         

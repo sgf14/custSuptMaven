@@ -1,9 +1,13 @@
 Purpose: This Maven project created from scratch in Eclipse to build JWA book 'customer-support' app as it progresses through chapters, starting with chapter 3. Using Git and Github for version control.
 
 TODO:
-reading chap 24. db- advanced mappings
+reading chap 28. db- oAuth web security
+
+Supporting docs:  see README files under SGF_Projects\JavaWebAppBook folder for project creation/basic notes.
 
 Notes/History:
+04/05/17: completed chap 27 changes to enable Spring Authorizations.  Note difference between Authenitication- verifiying that the user is who they say they are and Authorization- what resources that user has legitimate access to.  chap 26 was authentication, chap 27 is authorization and chap 28 is access to web services (REST/SOAP)
+--PART IV- Spring Security
 01/22/17: chap24 makes some pretty extensive changes to site\entities\TicketEntity and site\Ticket classes to address instant type variable 
  and attachment mgmt w/DefaultTicketService class.  It eliminates the DTO function that ticket.java performed w/ TicketEntity- pg 720.  wrapping my head 
  around the changes.  there are also DB structure changes and table additions needed- pg 721.
@@ -20,7 +24,7 @@ Notes/History:
 --PART III- data persistence
 10/28/16: chap 17- REST/SOAP services-machine to machine communication.  Ran & tested web-service imported project and in firefox RESTClient Add-on.  have not implemented chap 17 changes into custSuptMaven at this time.  -v14 version does similar REST Service w/ Tickets as web-service did with Accounts. It will rely on Validation items covered in chap 16.  Note web services are different than websockets discussed in chap 10 for chat functionality.
 10/25/16: chap 16- validation.  can do most of this via js in browser,  didnt update
-10/23/16: chap 15- Internationalization- not implemented,  browsed through chap
+10/23/16: chap 15- Internationalization- not implemented,  browsed through chap.  Revisited later and added code because all the UI messages are done via this i18n structure.
 10/16/16: finished both java and jsp portions, w/ all subfolders.  tested, fixed a few minor bugs and tested all functionality successfully.  New
  Spring MVC project setup properly up to chapter 14 (corresponds to customer-support-v11).
 10/15/16: finished documenting config package classes and w/i site- the Authenticator group w/ CSR comments.  each method group in site package 

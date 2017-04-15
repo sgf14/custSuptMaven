@@ -14,9 +14,18 @@ they are not built under this SGF_Projects folder.  They are housed under:
 
 Any file/java manual modifications for book examples are also under that Coding dir and not in the Eclipse Workspace.  See README_JavaServerNotes.md  on how to import project into Eclipse Java EE Working Set with others on the left.
 
-4) Note there are a few differences between the base pom.xml in imported examples and codehuas self created projects.  The directory structure is a little different in the book examples because he is pulling out the non-java parts to a base web/directory.  This necessitates a few changes in the <build> directions (which are not needed in codehaus version because src is found where it is expected by default).  See /web/index.jsp vs /src/main/webapp/index.jsp.  
+4) Note there are a few differences between the base pom.xml in imported examples and codehaus self created projects.  The directory structure is a little different in the book examples because he is pulling out the non-java parts to a base web/directory.  This necessitates a few changes in the <build> directions (which are not needed in codehaus version because src is found where it is expected by default).  See /web/index.jsp vs /src/main/webapp/index.jsp.  
 	- the maven youtube video has you changing the apache maven compiler to tomcat server directly.  I did not have to do this to follow the instructions at the top, because I am starting the tomcat server manually (run on server).  The video way does this automatically by incorporating the tomcat plugin into pom.xml, but you still need to launch a webpage in that version, so it didnt seem to me to any fewer steps.  the basic codehaus pom seems to work ok with the steps I listed above.
 	youtube = https://www.youtube.com/watch?v=YeC7XQho-O0  basic project creation only, but a good video.  approx 3min into video
 	more in depth one = https://www.youtube.com/watch?v=VOkgaq__Ff8
+	
+Resource and Test support folders:
+Upon project creation Create a java Resources folder (if it doesnt already exist) for log files.  Right Click java folder, then new Source Folder, then type project name in 1st box then path in 2nd- starting with src.  ie src/main/resources and finish.  any subfolders created click on /resources/ then rigth click and new/other/folder.  it will appear as a package symbol, but that is ok- it still acts as a folder.
+
+
+can also create Test folder via same method.
+
+NOTE; you must include the base folder path to the POM file for it to be recognized.  any subfolders do not need to be mapped specifically.
+see README_createMavenProj_JavaWebApp.md in SGF_Projects folder.
 
 

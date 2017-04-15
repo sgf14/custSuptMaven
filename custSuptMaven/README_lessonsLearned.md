@@ -14,4 +14,4 @@ the book created a root level web/ folder that houses the WEB-INF folder.  see b
 this may require a little more research when using the Java EE archetype when creating a project.
 this may just be the way that archetype handles it, and it may not offer a viable alternative, but do some research.  coPid structure
 also had the front end in it own root folder, although it is not a Maven project either.
-09/24/16- this ../webapp/ structure is just part of codehaus archetype.  would need to pick differetn one to change.  more research needed.
+09/24/16- this ../webapp/ structure is just part of codehaus archetype.  would need to pick different one to change.  more research needed.
