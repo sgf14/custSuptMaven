@@ -6,6 +6,11 @@ package com.prod.custSuptMaven.config;
  * Authentication = login.  Check that the person accessing the app is who they say they are.
  * Authorization = access to resources.  Once logged in [authenticated] this determines what functions 
  *   in the app the person can use/ has access to.
+ *   
+ * in Chap 28- OAuth- this entire class was subsequently replaced by securityConfirmation.xml since Oauth2 does
+ * not have the full compliment of java configuration features as of the book publish date in 2014.  therefore
+ * RootContextConfiguration calls the xml file- which does all the same things as this class plus the Oauth
+ * features.  In my version I left the class in place for comparison even though it is not called.
  */
 import javax.inject.Inject;
 
