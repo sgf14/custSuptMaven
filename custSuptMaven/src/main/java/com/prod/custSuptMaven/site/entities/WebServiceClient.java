@@ -1,20 +1,32 @@
 package com.prod.custSuptMaven.site.entities;
-/* class notes.  chap 28 pg 843 Oauth web service security.
- * this is the client vs server side of the equation.  POJO for client and tie to DB tables
+/* class notes: chap 28, pg 843- Oauth web services security. It defines the clients that are permitted to access your web services
+ * this is the class that establishes a client entity (vs the server entity) that allows clients 
+ * to access the authorized URIs.  
+ * 
+ * some primary alternatives to this method are built in 1) InMemoryClientDetailsService [cant be used in a clustered env]
+ *  and 2) JdbcClientDetailsService- but this will be a custom implementation since we are already using JPA, Spring Data and 
+ *  Spring Framework Transactions.  see pg 842.
  * 
  */
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
 
 @Entity
@@ -39,81 +51,117 @@ public class WebServiceClient implements ClientDetails, Serializable {
     	this.id = id;
     }
     
-    // TODO - left off here 04/15/17. more getters and setters
+    @Override
+	public String getClientId() {		
+		return this.clientId;
+	}
     
+    public void setClientId(String clientId) {
+    	this.clientId = clientId;
+    }
     
-
-    //carry in methods that need implementation
-	@Override
-	public Integer getAccessTokenValiditySeconds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Map<String, Object> getAdditionalInformation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<String> getAuthorizedGrantTypes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getClientId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
+    @Override
 	public String getClientSecret() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.clientSecret;
+	}
+    
+    public void setClientSecret(String clientSecret) {
+    	this.clientSecret = clientSecret;
+    }
+    
+    @Override
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "WebServiceClient_Scope", joinColumns = {
+            @JoinColumn(name = "WebServiceClientId",
+                    referencedColumnName = "WebServiceClientId")
+    })
+    @Column(name = "Scope")
+	public Set<String> getScope() {
+		return this.scope;
+	}
+    
+    public void setScope(Set<String> scope) {
+    	this.scope = scope;
+    }
+    
+    @Override
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "WebServiceClient_Grant", joinColumns = {
+            @JoinColumn(name = "WebServiceClientId",
+                    referencedColumnName = "WebServiceClientId")
+    })
+    @Column(name = "GrantName")
+	public Set<String> getAuthorizedGrantTypes() {
+		return this.authorizedGrantTypes;
+	}
+    
+    public void setAuthorizedGrantTypes(Set<String> authorizedGrantTypes) {
+    	this.authorizedGrantTypes = authorizedGrantTypes;
+    }
+    
+    @Override
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "WebServiceClient_RedirectUri", joinColumns = {
+            @JoinColumn(name = "WebServiceClientId",
+                    referencedColumnName = "WebServiceClientId")
+    })
+    @Column(name = "Uri")
+	public Set<String> getRegisteredRedirectUri() {
+		return this.registeredRedirectUri;
+	}
+    
+    public void setRegisteredRedirectUri(Set<String> registeredRedirectUri) {
+    	this.registeredRedirectUri = registeredRedirectUri;
+    }
+    
+    //other customized items (no var above- so no getters/setters)
+    private static final Set<String> RESOURCE_IDS = new HashSet<>();
+    private static final Set<GrantedAuthority> AUTHORITIES = new HashSet<>();
+    static {
+        RESOURCE_IDS.add("SUPPORT");
+        AUTHORITIES.add(new SimpleGrantedAuthority("OAUTH_CLIENT"));
+    }
+    
+    @Override
+    @Transient
+	public Set<String> getResourceIds() {
+		return RESOURCE_IDS;
+	}
+    
+    @Override
+    @Transient
+	public Collection<GrantedAuthority> getAuthorities() {		
+		return AUTHORITIES;
 	}
 
+    //other carry in methods for ClientDetails interface that need implementation
+	@Override
+	@Transient
+	public Integer getAccessTokenValiditySeconds() {		
+		return 3600;
+	}
+	
 	@Override
 	public Integer getRefreshTokenValiditySeconds() {
-		// TODO Auto-generated method stub
+		return -1;
+	}	
+	
+	@Override
+	@Transient
+	public Map<String, Object> getAdditionalInformation() {		
 		return null;
-	}
+	}	
 
 	@Override
-	public Set<String> getRegisteredRedirectUri() {
-		// TODO Auto-generated method stub
-		return null;
+	@Transient
+	public boolean isSecretRequired() {		
+		return true;
 	}
-
+	
 	@Override
-	public Set<String> getResourceIds() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<String> getScope() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isScoped() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isSecretRequired() {
-		// TODO Auto-generated method stub
-		return false;
+	@Transient
+	public boolean isScoped() {		
+		return true;
 	}
 
 }
