@@ -64,7 +64,7 @@ http://www.springframework.org/schema/security/spring-security-oauth2.xsd">
     <beans:bean id="nonceServices"
                 class="com.prod.custSuptMaven.site.DefaultOAuthNonceServices" />
     <beans:bean id="resourceServerFilter"
-                class="com.prod.custSuptMavenx.site.OAuthSigningTokenAuthenticationFilter">
+                class="com.prod.custSuptMaven.site.OAuthSigningTokenAuthenticationFilter">
         <beans:property name="authenticationEntryPoint"
                         ref="oauthAuthenticationEntryPoint" />
         <beans:property name="nonceServices" ref="nonceServices" />

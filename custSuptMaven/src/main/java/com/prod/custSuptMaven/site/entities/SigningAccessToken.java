@@ -36,8 +36,9 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 @Table(name = "OAuthAccessToken")
 public class SigningAccessToken implements OAuth2AccessToken, Serializable {
 	
-	private static final String SIGNING_TYPE = "Signing";
-	private static final String SIGNING_TYPE_LOWER = SIGNING_TYPE.toLowerCase();
+	public static final String SIGNING_TYPE = "Signing";
+	public static final String SIGNING_TYPE_LOWER = SIGNING_TYPE.toLowerCase();
+	
 	private static final long serialVersionUID = 1L;
 	
 	private long id;
