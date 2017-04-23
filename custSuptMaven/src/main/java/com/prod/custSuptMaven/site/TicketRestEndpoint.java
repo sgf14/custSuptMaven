@@ -6,9 +6,12 @@ import com.prod.custSuptMaven.config.annotation.RestEndpoint;
 import com.prod.custSuptMaven.exception.ResourceNotFoundException;
 import com.prod.custSuptMaven.site.entities.Attachment;
 import com.prod.custSuptMaven.site.entities.Ticket;
+import com.prod.custSuptMaven.site.entities.UserPrincipal;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import java.util.List;
 
 @RestEndpoint
@@ -51,7 +55,9 @@ public class TicketRestEndpoint
     public TicketWebServiceList read()
     {
         TicketWebServiceList list = new TicketWebServiceList();
-        list.setValue(this.ticketService.getAllTickets());
+        list.setValue(this.ticketService.getAllTickets(
+        		t -> t.getAttachments().forEach(Attachment::getContents)
+        ));
         return list;
     }
 
@@ -59,17 +65,23 @@ public class TicketRestEndpoint
     @ResponseBody @ResponseStatus(HttpStatus.OK)
     public Ticket read(@PathVariable("id") long id)
     {
-        Ticket ticket = this.ticketService.getTicket(id);
+        Ticket ticket = this.ticketService.getTicket(
+        		id, t -> t.getAttachments().forEach(Attachment::getContents)
+        );
         if(ticket == null)
             throw new ResourceNotFoundException();
         return ticket;
     }
 
     @RequestMapping(value = "ticket", method = RequestMethod.POST)
-    public ResponseEntity<Ticket> create(@RequestBody TicketForm form)
+    public ResponseEntity<Ticket> create(@AuthenticationPrincipal UserPrincipal user,
+    									@RequestBody TicketForm form)
     {
         Ticket ticket = new Ticket();
-        ticket.setCustomer(null); // TODO: How do you secure REST?  changed in chap 24 w/ user principal changes- REST and SOAP
+        // pre oauth chpa 28 version- not secured
+        //ticket.setCustomer(null); // TODO: How do you secure REST?  changed in chap 24 w/ user principal changes- REST and SOAP
+        //post oauth- now secured via UserPrincipal, same as UI, see pg 856
+        ticket.setCustomer(user);
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
         ticket.setAttachments(form.getAttachments());

@@ -49,28 +49,39 @@ public class DefaultTicketService implements TicketService
 
     @Override
     @Transactional
-    public List<Ticket> getAllTickets()
+    public List<Ticket> getAllTickets(TicketExpand...expands )
     {
-    	Iterable<Ticket> i = this.ticketRepository.findAll();
-        List<Ticket> l = new ArrayList<>();
-        i.forEach(l::add);
-        return l;
+    	Iterable<Ticket> iterable = this.ticketRepository.findAll();    	
+        List<Ticket> list = new ArrayList<>();
+        iterable.forEach(t -> {
+        	for(TicketExpand expand : expands)
+        		expand.accept(t);
+        	list.add(t);
+        });
+        return list;
     }
     
     @Override
     @Transactional
     public Page<SearchResult<Ticket>> search(String query,
     										boolean useBooleanMode,
-    										Pageable pageable) {
-    	return this.ticketRepository.search(query, useBooleanMode, pageable);
+    										Pageable pageable,
+    										TicketExpand... expands) {
+    	Page<SearchResult<Ticket>> results = this.ticketRepository
+    			.search(query, useBooleanMode, pageable);
+    	for(TicketExpand expand : expands)
+    		results.getContent().forEach(r -> expand.accept(r.getEntity()));
+    	return results;
     }
 
     @Override
     @Transactional
-    public Ticket getTicket(long id)
+    public Ticket getTicket(long id, TicketExpand... expands)
     {
     	Ticket ticket = this.ticketRepository.findOne(id);
         ticket.getNumberOfAttachments();
+        for(TicketExpand expand : expands)
+        	expand.accept(ticket);
         return ticket;
     }
     
@@ -110,13 +121,18 @@ public class DefaultTicketService implements TicketService
     //ticketComment blocks
     @Override
     @Transactional
-    public Page<TicketComment> getComments(long ticketId, Pageable pageable)
+    public Page<TicketComment> getComments(long ticketId, Pageable pageable,
+    										CommentExpand... expands)
     {
-    	return this.commentRepository.getByTicketId(ticketId, pageable);
+    	Page<TicketComment> results = this.commentRepository
+    			.getByTicketId(ticketId, pageable);
+    	for(CommentExpand expand : expands)
+    		results.getContent().forEach(expand);
+    	return results;
     }
 
     //as with above private convert method that was here removed entirely based on chap 24 (-v18)changes
-    //save as above- chap 27 spring securuty authorization replaced save with create and update
+    //save as above- chap 27 spring security authorization replaced save with create and update
 //    @Override
 //    @Transactional
 //    public void save(TicketComment comment, long ticketId)

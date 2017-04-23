@@ -9,7 +9,8 @@
         <i><spring:message code="message.login.loggedOut" /></i><br /><br />
     </c:if>
     <spring:message code="message.login.instruction" /><br /><br />
-    <form:form method="post" modelAttribute="loginForm" autocomplete="off">
+    <form:form method="post" modelAttribute="loginForm" autocomplete="off"
+    			action="${action}">
         <form:label path="username"><spring:message code="field.login.username" /></form:label><br />
         <form:input path="username" autocomplete="off"/><br />        
         <form:label path="password"><spring:message code="field.login.password" /></form:label><br />

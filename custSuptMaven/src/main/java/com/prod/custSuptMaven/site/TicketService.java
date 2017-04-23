@@ -21,6 +21,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 @Validated
 public interface TicketService
@@ -30,7 +31,7 @@ public interface TicketService
 	//this annotation introduced by chap 27 Spring security authorization, pg 809, to allow user level authorizations
 	// similar PreAuthorize on remaining service methods below also
 	@PreAuthorize("hasAuthority('VIEW_TICKETS')")
-    List<Ticket> getAllTickets();
+    List<Ticket> getAllTickets(TicketExpand... expand);
 	
 	//search method added in chap 23,  used for fulltext style search in this case. see pg 682
 	@NotNull
@@ -40,14 +41,16 @@ public interface TicketService
 				String query,
 			boolean useBooleanMode,
 			@NotNull(message = "{validate.ticketService.search.page}")
-				Pageable pageable
+				Pageable pageable,
+				TicketExpand...expand
 			);
 	
 	
 	@PreAuthorize("hasAuthority('VIEW_TICKETS')")
     Ticket getTicket(
             @Min(value = 1L, message = "{validate.ticketService.getTicket.id}")
-                long id
+                long id,
+            TicketExpand... expand
     );
 	
 	//chap 27 no requires normal save method to be split into a create and update set- since different user functions
@@ -78,7 +81,8 @@ public interface TicketService
             @Min(value = 1L, message = "{validate.ticketService.getComments.id}")
                 long ticketId,
             @NotNull(message = "{validate.ticketService.getComments.page}")
-                Pageable page
+                Pageable page,
+            CommentExpand... expand 
     );
     //pre chap 27 version- similar to above now has create/update methods instead of save
 //    void save(
@@ -108,5 +112,12 @@ public interface TicketService
     //added by chap 24 after attachment re factored into sepr tables
     @PreAuthorize("hasAuthority('VIEW_ATTACHMENT')")
     Attachment getAttachment(long id);
+    
+    //added by chap 28- oauth- and interfaces used above
+    @FunctionalInterface
+    public static interface TicketExpand extends Consumer<Ticket> { }
+
+    @FunctionalInterface
+    public static interface CommentExpand extends Consumer<TicketComment> { }
 }
 

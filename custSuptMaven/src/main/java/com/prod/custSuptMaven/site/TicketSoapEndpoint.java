@@ -4,6 +4,9 @@ package com.prod.custSuptMaven.site;
  */
 import com.prod.custSuptMaven.site.entities.Attachment;
 import com.prod.custSuptMaven.site.entities.Ticket;
+import com.prod.custSuptMaven.site.entities.UserPrincipal;
+
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.Namespace;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -14,6 +17,7 @@ import org.springframework.ws.server.endpoint.annotation.XPathParam;
 import javax.inject.Inject;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import java.util.List;
 
 @Endpoint
@@ -28,7 +32,9 @@ public class TicketSoapEndpoint
     public TicketWebServiceList read()
     {
         TicketWebServiceList list = new TicketWebServiceList();
-        list.setValue(this.ticketService.getAllTickets());
+        list.setValue(this.ticketService.getAllTickets(
+        		t -> t.getAttachments().forEach(Attachment::getContents)
+        ));
         return list;
     }
 
@@ -37,15 +43,21 @@ public class TicketSoapEndpoint
     @ResponsePayload
     public Ticket read(@XPathParam("/s:ticketRequest/id") long id)
     {
-        return this.ticketService.getTicket(id);
+        return this.ticketService.getTicket(
+        		id, t -> t.getAttachments().forEach(Attachment::getContents)
+        );
     }
 
     @PayloadRoot(namespace = NAMESPACE, localPart = "createTicket")
     @ResponsePayload
-    public Ticket create(@RequestPayload CreateTicket form)
+    public Ticket create(@AuthenticationPrincipal UserPrincipal user,
+    					@RequestPayload CreateTicket form)
     {
         Ticket ticket = new Ticket();
-        ticket.setCustomer(null); // TODO: How do you secure SOAP? changed in chap 24 w/ user principal changes- REST and SOAP
+        //pre oauth chap 28
+        //ticket.setCustomer(null); // TODO: How do you secure SOAP? changed in chap 24 w/ user principal changes- REST and SOAP
+        //post oauth - see pg 856- now web serivces secured via UserPrincipal
+        ticket.setCustomer(user);
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
         if(form.getAttachments() != null)

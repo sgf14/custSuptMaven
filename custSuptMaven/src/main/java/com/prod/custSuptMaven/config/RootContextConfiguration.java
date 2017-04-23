@@ -87,7 +87,7 @@ import javax.sql.DataSource;
 
 //chap 28- Oauth, pg 852 changed the secconfig to new .xml file that supports oAuth functions for Web Service security
 //note ImportResource vs Import
-@ImportResource({ "classpath:com/prod/custSuptMaven/config.securityConfiguration.xml"})
+@ImportResource({ "classpath:com/prod/custSuptMaven/config/securityConfiguration.xml"})
 
 //in initial projects this class was vacant but starting chap 13/14 it initiates the commons- see pg 348 vs 375/76 as an example
 public class RootContextConfiguration
