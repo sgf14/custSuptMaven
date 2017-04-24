@@ -9,6 +9,8 @@
         <i><spring:message code="message.login.loggedOut" /></i><br /><br />
     </c:if>
     <spring:message code="message.login.instruction" /><br /><br />
+    <%--note- chap 28 oayth add- /login/submit line needed to be added due to xml vs java config see securityConfiguration.xml and pg 855--%>
+    <c:url value="/login/submit" var="action" />
     <form:form method="post" modelAttribute="loginForm" autocomplete="off"
     			action="${action}">
         <form:label path="username"><spring:message code="field.login.username" /></form:label><br />

@@ -135,6 +135,8 @@ public class WebServiceClient implements ClientDetails, Serializable {
 	}
 
     //other carry in methods for ClientDetails interface that need implementation
+    //the @Transient annotation is critical in this group- otherwise deploy will be looking for getter and setter
+    //and will fail to start
 	@Override
 	@Transient
 	public Integer getAccessTokenValiditySeconds() {		
@@ -142,6 +144,7 @@ public class WebServiceClient implements ClientDetails, Serializable {
 	}
 	
 	@Override
+	@Transient
 	public Integer getRefreshTokenValiditySeconds() {
 		return -1;
 	}	

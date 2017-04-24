@@ -62,12 +62,16 @@ import javax.sql.DataSource;
 //following 2 annot. SQL add.  Ensures async takes precedence over SQL transaction so transaction doesnt get partially cutoff- see chap 21 pg 609 
 @EnableAsync(
 		mode = AdviceMode.PROXY, proxyTargetClass = false,
-        order = Ordered.HIGHEST_PRECEDENCE
+		//chap 28 oauth order change
+		order = 1
+        //order = Ordered.HIGHEST_PRECEDENCE
 )
 
 @EnableTransactionManagement(
         mode = AdviceMode.PROXY, proxyTargetClass = false,
-        order = Ordered.LOWEST_PRECEDENCE
+        //chap 28 oauth order change
+        order = 2
+        //order = Ordered.LOWEST_PRECEDENCE
 )
 //chap 22- spring data jpa
 @EnableJpaRepositories(
