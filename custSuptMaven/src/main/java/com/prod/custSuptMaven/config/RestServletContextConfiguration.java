@@ -57,7 +57,7 @@ public class RestServletContextConfiguration extends WebMvcConfigurerAdapter
 {
 	private static final Logger log = LogManager.getLogger();
 	
-	//injects sources from rootContext initialization.  see WeServlet notes also
+	//injects sources from rootContext initialization.  see WebServlet notes also
 	@Inject ApplicationContext applicationContext;
     @Inject ObjectMapper objectMapper;
     @Inject Marshaller marshaller;

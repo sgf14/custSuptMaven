@@ -1,5 +1,14 @@
 package com.prod.custSuptMaven.site;
 /* class notes.  chap 28, pg 850
+ * TODO 04/30/17- the webservice works under some circumstances, but the ticket add function broke.  need to fix.
+ * in terms of webservice it works when logged in as John, but not Nicholas.  both have web_service authorization, so both 
+ *   should work.  also once you test this once you cant log into web app as John (or anyone else that was tried) so there are
+ *   some deficiencies.
+ *   
+ *   
+ *   for the ticket add.  verified this broke in both the customer-support-v21 and custSuptMaven apps.  so its more than just a typo in
+ *   my version of the project.  might be a little more difficult to fix.
+ *   
  * class customizes the resource server filter.  Oauth default methods handle bearer tokens
  * and this custom built class handles the signature style tokens advocated by the book
  * as a better- more secure- solution for Web Service security.
@@ -73,8 +82,9 @@ public class OAuthSigningTokenAuthenticationFilter implements Filter {
         {
             Map<String, String> header = this.parseHeader(httpRequest);
             if(header == null)
-                log.debug("No token in request, will continue chain.");
+                log.info("No token in request, will continue chain.");
             else
+            	log.info("token authenticated");
                 this.authenticate(header, httpRequest);
         }
         catch(OAuth2Exception e)
@@ -136,10 +146,11 @@ public class OAuthSigningTokenAuthenticationFilter implements Filter {
                               HttpServletRequest request)
     {
         String tokenId = header.get("token_id");
-        if(tokenId == null)
+        if(tokenId == null) {
+        	log.info("no token.  InvalidTokenException triggered");
             throw new InvalidTokenException("Header [" + header +
-                    "] missing token_id.");
-
+                    "] missing token_id.");            
+        }
         SigningAccessToken token = this.tokenServices.getAccessToken(tokenId);
         if(token == null)
             throw new InvalidTokenException("Token [" + tokenId + "] not found.");
@@ -159,6 +170,9 @@ public class OAuthSigningTokenAuthenticationFilter implements Filter {
 
         String timestamp = header.get("timestamp");
         String nonce = header.get("nonce");
+        log.info("nonce = {}", nonce);
+        log.info("timestamp = {}", timestamp);
+        
         if(timestamp == null || nonce == null)
             throw new InvalidTokenException("Header missing timestamp or nonce.");
 
@@ -184,6 +198,7 @@ public class OAuthSigningTokenAuthenticationFilter implements Filter {
         authentication.setDetails(this.authenticationDetailsSource.buildDetails(
                 request
         ));
+        log.info("token authenticate successful.  setting securityContextHolder");
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

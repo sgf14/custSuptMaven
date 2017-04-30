@@ -12,15 +12,15 @@ import com.prod.custSuptMaven.site.repositories.UserRepository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+//import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
-import java.nio.charset.StandardCharsets;
+//import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
@@ -94,7 +94,7 @@ public class DefaultUserService implements UserService
     	
     	//chap 27, pg 807 authorization version
     	UserPrincipal principal = userRepository.getByUsername(username);
-    	// make sure the authoriries and password are loaded
+    	// make sure the authorizes and password are loaded
     	principal.getAuthorities().size();
     	principal.getPassword();
     	return principal;

@@ -7,7 +7,8 @@
                     pattern="%d{MM-dd-yyyy HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
 <!--         see pg 315- had to change this from book default path of ../logs/support.log -->
-<!-- but this version does create a log file and works -->
+<!-- which will go to eclipse app directory (eclipse luna in my case) to the logs folder.  and not to apache app log dir-->
+<!-- but line below does create a log file and works.  Instead of a relative path it uses the full path -->
         <RollingFile name="WroxFileAppender" fileName="C:/Program Files/Apache/apache-tomcat-8.0.35/logs/support.log"
                      filePattern="C:/Program Files/Apache/apache-tomcat-8.0.35/logs/support-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout>

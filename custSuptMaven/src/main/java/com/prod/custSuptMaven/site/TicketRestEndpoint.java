@@ -78,7 +78,7 @@ public class TicketRestEndpoint
     									@RequestBody TicketForm form)
     {
         Ticket ticket = new Ticket();
-        // pre oauth chpa 28 version- not secured
+        // pre oauth chap 28 version- not secured
         //ticket.setCustomer(null); // TODO: How do you secure REST?  changed in chap 24 w/ user principal changes- REST and SOAP
         //post oauth- now secured via UserPrincipal, same as UI, see pg 856
         ticket.setCustomer(user);
