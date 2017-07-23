@@ -1,12 +1,14 @@
-Purpose: This Maven project created from scratch in Eclipse to build JWA book 'customer-support' app as it progresses through chapters, starting with chapter 3. Using Git and Github for version control.
+Purpose: This Maven project created from scratch in Eclipse to build JWA book 'customer-support' app as it progresses through chapters, starting with chapter 3. Using Git and Github for version control. To start project start server w/custSuptMaven and oauth-client (as of chap 28), then open browser to http://localhost:8080/ to get to login.  Still have 45 sec server timeout issue that occurs on first run.  havent changed this window in server because 2nd run is faster and has always started the 2nd time ok. GitHub project is updated to chap 28 [last chapter] changes.
 
 TODO:
-reading chap 28. db- oAuth web security
+None at this time.  Finished book with main chapters complete and tested.  Some oauth items noted below.  there are also several improvments that could be made from a usability and appearance standpoint.
 
 Supporting docs:  see README files under SGF_Projects\JavaWebAppBook folder for project creation/basic notes.
 
 Notes/History:
-04/05/17: completed chap 27 changes to enable Spring Authorizations.  Note difference between Authenitication- verifiying that the user is who they say they are and Authorization- what resources that user has legitimate access to.  chap 26 was authentication, chap 27 is authorization and chap 28 is access to web services (REST/SOAP)
+07/21/17: need to make a list of things to independently work on as improvements, but book chapters themselves are complete and functionally work.
+05/06/17: completed chap 28 Oauth.  based on book version created a separate project oauth-client, which is used as part of the testing.  Basic function works ok, but there are some items towards end of chapter that arent working quite as I expected.  Need to add details based on further testing.  at this point I am not exactly sure how to address them- it would take some research online.
+04/05/17: completed chap 27 changes to enable Spring Authorizations.  Note difference between Authentication- verifying that the user is who they say they are and Authorization- what resources that user has legitimate access to.  chap 26 was authentication, chap 27 is authorization and chap 28 is access to web services (REST/SOAP)
 --PART IV- Spring Security
 01/22/17: chap24 makes some pretty extensive changes to site\entities\TicketEntity and site\Ticket classes to address instant type variable 
  and attachment mgmt w/DefaultTicketService class.  It eliminates the DTO function that ticket.java performed w/ TicketEntity- pg 720.  wrapping my head 

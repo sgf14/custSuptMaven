@@ -100,7 +100,7 @@ public class DefaultTicketService implements TicketService
     @Override
     @Transactional
     public void create(Ticket ticket) {
-    	ticket.setDateCreated(Instant.now());
+    	ticket.setDateCreated(Instant.now());    	
     	this.ticketRepository.save(ticket);
     }
     

@@ -63,13 +63,13 @@ public interface TicketService
 	// chap 27 changes to save method into create and update
 	@PreAuthorize("#ticket.id == 0 and hasAuthority('CREATE_TICKET')")
 	void create(@NotNull(message = "{validate.ticketService.save.ticket}")
-				@Valid @P("ticket") Ticket ticket
+				@Valid @P("ticket") Ticket ticket 
 	);
 	
 	@PreAuthorize("(authentication.principal.equals(#ticket.customer) and "
 			+ "hasAuthority('EDIT_OWN_TICKET')) or hasAuthority('EDIT_ANY_TICKET')")
 	void update(@NotNull(message = "{validate.ticketService.save.ticket}")
-				@Valid @P("ticket") Ticket ticket
+				@Valid @P("ticket") Ticket ticket 
 	);
 	
 	@PreAuthorize("hasAuthority('DELETE_TICKET')")
